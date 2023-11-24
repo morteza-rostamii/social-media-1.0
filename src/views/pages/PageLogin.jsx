@@ -7,8 +7,6 @@ import {useNavigate} from 'react-router-dom'
 //import useAuthStore from '@/store/store.auth'
 
 // components
-import {Button} from '@mantine/core'
-import { Input } from '@mantine/core';
 import {Link} from 'react-router-dom'
 
 const PageLogin = () => {
@@ -68,24 +66,24 @@ const PageLogin = () => {
         <h1>
         Login Form
         </h1>
-        <Input 
+        <input 
 
         placeholder="email" 
         value={user.email}
         onChange={(e) => setUser(c => ({...c, email: e.target.value}))}
         />
-        <Input 
+        <input 
         placeholder="password" 
         type='password'
         value={user.password}
         onChange={(e) => setUser(c => ({...c, password: e.target.value}))}
         />
 
-        <Button
+        <button
         type='submit'
         >
           login
-        </Button>
+        </button>
         <Link to='/register'>go to register</Link>
       </form>
     </div>

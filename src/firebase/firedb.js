@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import {getAuth, GoogleAuthProvider} from 'firebase/auth'; 
 
 import {getFirestore} from 'firebase/firestore'
+import {getStorage} from 'firebase/storage'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -16,8 +17,8 @@ const firebaseConfig = {
   projectId: "rostami-sites",
   storageBucket: "rostami-sites.appspot.com",
   messagingSenderId: "764202708776",
-  appId: "1:764202708776:web:6f6a116b63661d8ddcaa1d",
-  measurementId: "G-1W0G8SX5N6"
+  appId: "1:764202708776:web:48ed396537d14361dcaa1d",
+  measurementId: "G-GSLC3L9T17"
 };
 
 // Initialize Firebase
@@ -32,5 +33,8 @@ export const googleProvider = new GoogleAuthProvider();
 
 // fire store
 export const firestore = getFirestore(app);
+
+// storage
+export const storage = getStorage(app);
 
 console.log('firebase is on !!');

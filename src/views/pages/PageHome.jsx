@@ -3,21 +3,33 @@ import React, { useState } from 'react'
 
 // components
 //import Expense from '@/views/components/Expense'
-import {Button} from '@mantine/core'
 import {Link} from 'react-router-dom'
+//import ChatApp from '@/practices/ChatApp';
+import {Button} from '@chakra-ui/react'
+
+import ModalCreatePost from '@/modules/posts/components/ModalCreatePost';
 
 const PageHome = props => {
   const [isAuth, setIsAuth] = useState(false);
 
   return (
     <div
+    id='page-home'
     className='
-    grid place-items-center
+    grid place-items-center h-full
+    container mx-auto
+    bg-slate-100
     '
     >
-      <h1>
-        Expense tracker app
-      </h1>
+      {/* create post */}
+      <div>
+        <ModalCreatePost test='for test'/>
+      </div>
+
+      {/* infinit posts scroll */}
+      <div>
+        
+      </div>
     </div>
   )
 }

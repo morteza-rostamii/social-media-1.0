@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import Morteza from '@/views/components/Morteza'
-import {Button} from '@mantine/core'
 import {Routes, Route, Link} from 'react-router-dom'
 import LayMain from './views/layouts/LayMain'
 import PageHome from './views/pages/PageHome'
@@ -8,7 +6,7 @@ import PageRegister from './views/pages/PageRegister'
 import PageLogin from './views/pages/PageLogin'
 //import PageBlog from './views/pages/PageBlog'
 
-import useAuthStore from '@/store/store.auth'
+import useAuthStore from '@/modules/auth/store.auth'
 import {onAuthStateChanged} from 'firebase/auth'
 import {auth} from '@/firebase/firedb'
 

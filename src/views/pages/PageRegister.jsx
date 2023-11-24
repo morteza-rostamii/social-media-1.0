@@ -3,10 +3,10 @@ import {auth, googleProvider} from '@/firebase/firedb'
 import {createUserWithEmailAndPassword, signInWithPopup} from 'firebase/auth'
 
 // components
-import {Button} from '@mantine/core'
-import { Input } from '@mantine/core';
 import {Link, useNavigate} from 'react-router-dom'
 import {FaGoogle} from 'react-icons/fa'
+import useAuthStore from '@/modules/auth/store.auth';
+import { Button, ButtonGroup } from '@chakra-ui/react'
 
 const PageRegister = () => {
   const [currentAuth] = useState(auth);
@@ -15,33 +15,20 @@ const PageRegister = () => {
     email: '',
     password: '',
   });
+  const {registerAct} = useAuthStore
 
   const navigate = useNavigate();
 
   // register with email and password
   async function register() {
 
-    await createUserWithEmailAndPassword(auth, user.email, user.password)
-      .then((userCredential) => {
-        // returns the signed up user
-        const currentUser = userCredential.user;
-        console.log(currentUser);
-        setUser({
-          username: '', 
-          email: '',
-          password: '',
-        });
-        navigate('/login')
-      })
-      .catch((error) => {
-        console.log(
-          error.code,
-          error.message
-        )
-      }) 
-    
-    // this also can get the current logged in user
-    // /console.log(auth?.currentUser)
+    registerAct(user)
+    setUser({
+      username: '', 
+      email: '',
+      password: '',
+    });
+    navigate('/login')
   } 
 
   // google auth
@@ -81,33 +68,33 @@ const PageRegister = () => {
         <h1>
         Register Form
         </h1>
-        {/* <Input 
+        {/* <input 
 
         placeholder="username" 
         value={user.username}
         onChange={(event) => setUser((c) => ({...c, username: event.target.value}))}
         /> */}
-        <Input 
+        <input 
 
         placeholder="email" 
         value={user.email}
         onChange={(event) => setUser((c) => ({...c, email: event.target.value}))}
         />
-        <Input 
+        <input 
         placeholder="password" 
         type='password'
         value={user.password}
         onChange={(event) => setUser((c) => ({...c, password: event.target.value}))}
         />
 
-        <Button
+        <button
         type='submit'
         >
           register
-        </Button>
+        </button>
         <Link to='/login'>go to login</Link>
 
-        <Button
+        <button
         variant='outline'
         color='red'
         
@@ -121,7 +108,7 @@ const PageRegister = () => {
           <FaGoogle/>
           <span>google</span>
           </span>
-        </Button>
+        </button>
       </form>
     </div>
   )
