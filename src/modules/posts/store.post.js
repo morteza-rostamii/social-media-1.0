@@ -26,7 +26,7 @@ const usePostsStore = create((set, get) => ({
   //========================================
   
   // Get: /blogs
-  async fetchBlogs() {
+  async fetchPosts() {
     
     try {
       const data = await getDocs(postsCollectionRef);          
@@ -36,7 +36,7 @@ const usePostsStore = create((set, get) => ({
         id: doc.id,
       }));
 
-      return set(state => ({...state, blogs: docs}));
+      set(state => ({...state, posts: docs}));
     } catch(error) {
       console.log(error);
     }
