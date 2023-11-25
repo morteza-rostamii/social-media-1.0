@@ -12,21 +12,24 @@ const CardPost_a = ({
     <div
     id='card-post-a'
     className='
-    rounded-md overflow-hidden
+    rounded-md overflow-hidden max-w-sm
     '
     >
       <div
       id='card-post-img-container'
       className='
       relative
-      max-h-96 overflow-hidden w-full
+      #max-h-96 overflow-hidden w-full
       mb-2
       '
+      style={{
+        maxHeight: '800px'
+      }}
       >
         <img 
         className='
         aspect-square
-        object-contain
+        object-cover
         w-full
         '
         src={post?.img || 'https://placehold.co/400'} 

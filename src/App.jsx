@@ -29,10 +29,10 @@ function App() {
     })
 
     // event: on posts[] update run this:
-    //const unsubOnPostsUpdate = onPostsUpdate();
+    const unsubOnPostsUpdate = onPostsUpdate();
 
     // clean up
-    //return () => unsubOnPostsUpdate();
+    return () => unsubOnPostsUpdate();
   }, []);
 
   return (

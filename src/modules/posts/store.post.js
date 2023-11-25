@@ -1,6 +1,6 @@
 import {create} from 'zustand'
 import {firestore} from '@/firebase/firedb'
-import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot, Timestamp} from 'firebase/firestore'
+import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot, Timestamp, limit, startAfter } from 'firebase/firestore'
 //import { getDocFromResponse } from '@/utils/utils.fixdata';
 import { Post } from '@/schemas/schema';
 
@@ -11,6 +11,7 @@ const postsCollectionRef = collection(firestore, 'posts');
 
 const usePostsStore = create((set, get) => ({
   posts: [], // [Post]
+  lastDoc: null, // last post fetched
 
   // create post data
   newPost: new Post({}),
@@ -67,14 +68,13 @@ const usePostsStore = create((set, get) => ({
         if (createdDoc[0]) {
           console.log('update with new doc!!')
 
+          // check to see new item already exist in state or not
           const doesExist = get().posts.some(p => p.id === createdDoc[0].id);
-
           if (doesExist) createdDoc = [];
 
           set(state => ({
             ...state,
             posts: [
-              // check to see new item already exist in state or not
               ...createdDoc, 
               ...state.posts],
           }));
@@ -86,28 +86,57 @@ const usePostsStore = create((set, get) => ({
   },
 
   // Get: /blogs
-  async fetchPosts() {
+  async fetchInitPosts(page=1, lim=2) {
     
-    let unSub;
+    //let unSub;
 
-    if (unSub) unSub(); 
+    //if (unSub) unSub(); 
 
     try {
-      const data = await getDocs(postsCollectionRef);          
-
-      const docs = data.docs.map((doc) => ({
-        ...doc.data(),
+      //const querySnapshot = await getDocs(query(collection(db, 'users'), limit(5)));
+      const querySnapshot = await getDocs(query(postsCollectionRef, limit(lim)));          
+      const docs = querySnapshot.docs;
+      const newPosts = docs.map((doc) => ({
         id: doc.id,
+        ...doc.data(),
       }));
 
-      set(state => ({...state, posts: [...docs]}));
+      set(state => ({
+        ...state, 
+        posts: [...newPosts],
+        // set the last doc fetched
+        lastDoc: docs[docs.length - 1],
+      }));
 
+      //console.log(get().lastDoc)
       // set events for listening for new post
-      unSub = get().onPostsUpdate();
+      //unSub = get().onPostsUpdate();
 
     } catch(error) {
       console.log(error);
     }
+  },
+
+  // get more posts
+  async fetchMorePosts(page=1, lim=2) {
+    const querySnapshot = await getDocs(query(
+      postsCollectionRef, 
+      limit(lim),
+      startAfter(get().lastDoc)
+      ));          
+      const docs = querySnapshot.docs;
+      const morePosts = docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      set(state => ({
+        ...state, 
+        posts: [...state.posts, ...morePosts],
+        // set the last doc fetched
+        // if: docs empty =: lastDoc = undefined
+        lastDoc: docs[docs.length - 1],
+      }));
   },
 
   // get published blogs

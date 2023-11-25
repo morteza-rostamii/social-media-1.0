@@ -5479,6 +5479,8 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-firebase-hooks: "npm:^5.1.1"
     react-icons: "npm:^4.12.0"
+    react-infinite-scroll-component: "npm:^6.1.0"
+    react-infinite-scroller: "npm:^1.2.6"
     react-router: "npm:^6.19.0"
     react-router-dom: "npm:^6.19.0"
     tailwindcss: "npm:^3.3.5"
@@ -5499,7 +5501,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.8, prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -5610,6 +5612,28 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: 2170f43031ee7365539f72d4075cbe6c7fbf9a66d6cf4494aa9393b194272da0564f5b19d1b24dbfc567c0ac89f5fe5b8974d92dd83f61e252388dde6a226fb8
+  languageName: node
+  linkType: hard
+
+"react-infinite-scroll-component@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "react-infinite-scroll-component@npm:6.1.0"
+  dependencies:
+    throttle-debounce: "npm:^2.1.0"
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 8de02f178ae861880dddbd0c882dc70b55e21737b87fe428140d81a2c5d13c5eeba8a4fc260b1e86e4c556fdea333d6babaed55a9e5987a42b181b2d92f69cd8
+  languageName: node
+  linkType: hard
+
+"react-infinite-scroller@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "react-infinite-scroller@npm:1.2.6"
+  dependencies:
+    prop-types: "npm:^15.5.8"
+  peerDependencies:
+    react: ^0.14.9 || ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: dc269b873603a1acff3fe78d6f9a073623205cd9317da71e62306302d18ba1f89a78d8b13654d52efb289d4bf769ea803aeff6ee0afd26f6576c1e4a935a238d
   languageName: node
   linkType: hard
 
@@ -6304,6 +6328,13 @@ __metadata:
   dependencies:
     any-promise: "npm:^1.0.0"
   checksum: f375aeb2b05c100a456a30bc3ed07ef03a39cbdefe02e0403fb714b8c7e57eeaad1a2f5c4ecfb9ce554ce3db9c2b024eba144843cd9e344566d9fcee73b04767
+  languageName: node
+  linkType: hard
+
+"throttle-debounce@npm:^2.1.0":
+  version: 2.3.0
+  resolution: "throttle-debounce@npm:2.3.0"
+  checksum: 41648e4cf46f935818af32ecac34f9876c618f24e300551cbe3a0ca2c5828cb8d2f9b73e6e1e2f8c64237f70fbc8c541f9b5c9114da70b33b1ed10ba4cc6b15f
   languageName: node
   linkType: hard
 
