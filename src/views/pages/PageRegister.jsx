@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import {auth, googleProvider} from '@/firebase/firedb'
-import {createUserWithEmailAndPassword, signInWithPopup} from 'firebase/auth'
 
 // components
 import {Link, useNavigate} from 'react-router-dom'
@@ -9,13 +7,12 @@ import useAuthStore from '@/modules/auth/store.auth';
 import { Button, ButtonGroup } from '@chakra-ui/react'
 
 const PageRegister = () => {
-  const [currentAuth] = useState(auth);
   const [user, setUser] = useState({
     username: '',
     email: '',
     password: '',
   });
-  const {registerAct} = useAuthStore
+  const {registerAct, loginWithGoogleAct} = useAuthStore();
 
   const navigate = useNavigate();
 
@@ -29,19 +26,6 @@ const PageRegister = () => {
       password: '',
     });
     navigate('/login')
-  } 
-
-  // google auth
-  function handGoogleAuth() {
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        console.log('signed in with google!')
-        console.log(result);
-        navigate('/');
-      })
-      .catch((error) => {
-        console.log(error);
-      })
   }
 
   return (
@@ -54,7 +38,7 @@ const PageRegister = () => {
       <form 
       className='
       flex flex-col gap-8 p-4 rounded-md
-      bg-blue-100 text-center
+      bg-slate-100 text-center
       '
       onSubmit={(event) => {
         event.preventDefault();
@@ -94,21 +78,21 @@ const PageRegister = () => {
         </button>
         <Link to='/login'>go to login</Link>
 
-        <button
+        <Button
         variant='outline'
-        color='red'
+        colorScheme='cyan'
         
-        onClick={handGoogleAuth}
+        onClick={() => loginWithGoogleAct(navigate)}
         >
           <span
           className='
-          flex gap-3
+          flex gap-3 items-center
           '
           >
           <FaGoogle/>
           <span>google</span>
           </span>
-        </button>
+        </Button>
       </form>
     </div>
   )

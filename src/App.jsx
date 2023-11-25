@@ -9,9 +9,11 @@ import PageLogin from './views/pages/PageLogin'
 import useAuthStore from '@/modules/auth/store.auth'
 import {onAuthStateChanged} from 'firebase/auth'
 import {auth} from '@/firebase/firedb'
+import usePostsStore from './modules/posts/store.post'
 
 function App() {
   const {authUser, setAuth} = useAuthStore();
+  const {onPostsUpdate} = usePostsStore();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -25,6 +27,12 @@ function App() {
         setAuth(undefined);
       }
     })
+
+    // event: on posts[] update run this:
+    //const unsubOnPostsUpdate = onPostsUpdate();
+
+    // clean up
+    //return () => unsubOnPostsUpdate();
   }, []);
 
   return (

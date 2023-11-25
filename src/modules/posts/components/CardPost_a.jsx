@@ -19,7 +19,7 @@ const CardPost_a = ({
       id='card-post-img-container'
       className='
       relative
-      max-h-60 overflow-hidden w-full
+      max-h-96 overflow-hidden w-full
       mb-2
       '
       >

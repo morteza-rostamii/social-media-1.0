@@ -1,4 +1,4 @@
-import {Timestamp} from 'firebase/firestore'
+import {Timestamp, serverTimestamp} from 'firebase/firestore'
 
 export class Post {
 
@@ -7,8 +7,8 @@ export class Post {
     image,
     numOfLikes,
     numOfComments,
-    createdAt, 
-    updatedAt,
+    //createdAt, 
+    //updatedAt,
     comments,
     user,
   }) {
@@ -16,10 +16,11 @@ export class Post {
     this.image= image || '';
     this.numOfLikes= numOfLikes || 0;
     this.numOfComments= numOfComments || 0;
-    this.createdAt= createdAt || Timestamp.fromDate(new Date());
-    this.updatedAt= updatedAt || Timestamp.fromDate(new Date());
+    this.createdAt= serverTimestamp();
+    this.updatedAt= serverTimestamp();
 
     this.comments= comments || []; //[Comment=id]
     this.user= user || ''; // User:id
   }
 }
+//Timestamp.fromDate(new Date())

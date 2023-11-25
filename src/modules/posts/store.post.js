@@ -10,7 +10,7 @@ import useAuthStore from '@/modules/auth/store.auth'
 const postsCollectionRef = collection(firestore, 'posts');
 
 const usePostsStore = create((set, get) => ({
-  posts: [],
+  posts: [], // [Post]
 
   // create post data
   newPost: new Post({}),
@@ -25,9 +25,73 @@ const usePostsStore = create((set, get) => ({
 
   //========================================
   
+  // update posts on new post added
+  // runs on any request: get, put, post, delete
+  onPostsUpdate() {
+
+
+
+    const unsub = onSnapshot(postsCollectionRef, (snapShot) => {
+
+      // check if collection size has changed!!
+      //snapShot.size > 0
+      if (get().posts !== null) {
+        console.log('new post added!!');
+  
+
+
+        //const docs = snapShot.docs;
+  
+        // data[] array of docs
+        /* const newPosts = docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        })); */
+        
+
+        //console.log(snapShot)
+        const data = snapShot?.docChanges();
+        let createdDoc = null;
+        if (data) {
+          createdDoc = data.map(change => {
+            //if (change.type == 'modified') {
+              const theDoc = {id: change.doc.id, ...change.doc.data()}
+              return theDoc;
+            //}
+          });
+        }
+
+        // if: a doc is created add the doc to front
+        console.log('before update with new doc!!-----')
+        console.log(data, '----', createdDoc)
+        if (createdDoc[0]) {
+          console.log('update with new doc!!')
+
+          const doesExist = get().posts.some(p => p.id === createdDoc[0].id);
+
+          if (doesExist) createdDoc = [];
+
+          set(state => ({
+            ...state,
+            posts: [
+              // check to see new item already exist in state or not
+              ...createdDoc, 
+              ...state.posts],
+          }));
+        }
+      }
+    });
+
+    return unsub;
+  },
+
   // Get: /blogs
   async fetchPosts() {
     
+    let unSub;
+
+    if (unSub) unSub(); 
+
     try {
       const data = await getDocs(postsCollectionRef);          
 
@@ -36,7 +100,11 @@ const usePostsStore = create((set, get) => ({
         id: doc.id,
       }));
 
-      set(state => ({...state, posts: docs}));
+      set(state => ({...state, posts: [...docs]}));
+
+      // set events for listening for new post
+      unSub = get().onPostsUpdate();
+
     } catch(error) {
       console.log(error);
     }
@@ -71,7 +139,7 @@ const usePostsStore = create((set, get) => ({
       console.log(docRef, docRef.id);
 
     } catch(error) {
-      console.log(error);
+      console.log(error.message);
     }
       
   },

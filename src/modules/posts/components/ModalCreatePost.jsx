@@ -60,7 +60,7 @@ class ModalCreatePost extends React.Component {
   componentDidMount() {
     //console.log('mounted!!');
     //console.log(this.props);
-    console.log('--', this.props.newPost)
+    //console.log('--', this.props.newPost)
   }
 
   //=====================================
@@ -78,7 +78,7 @@ class ModalCreatePost extends React.Component {
   async handCreatePost(event) {
     event.preventDefault();
     
-    console.log(this.props.newPost);    
+    //console.log(this.props.newPost);    
     await this.props.createPost(this.props.newPost);
 
     console.log('after post create in component!!');

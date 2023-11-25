@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import CardPost_a from './CardPost_a'
 import usePostsStore from '../store.post'
+import useRunOnce from '@/gg/hooks/useRunOnce'
 
 const FeedPosts = () => {
   const {posts, fetchPosts} = usePostsStore();
 
-  useEffect(() => {
+  useRunOnce(() => {
     (async () => fetchPosts())();
-  }, []);
+  });
 
   return (
     <div
@@ -16,7 +17,10 @@ const FeedPosts = () => {
       {
         posts && posts.length
         ? (
-          posts.map((post) => <CardPost_a key={post.id} post={post}/>)
+          posts.map((post) => {
+            console.log(posts);
+            return <CardPost_a key={post.id} post={post}/>
+          })
         ):('')
       }
     </div>

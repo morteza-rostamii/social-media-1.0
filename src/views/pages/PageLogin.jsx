@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import {auth} from '@/firebase/firedb'
-import {signInWithEmailAndPassword} from 'firebase/auth'
-import {useNavigate} from 'react-router-dom'
 
+import {useNavigate} from 'react-router-dom'
+import useAuthStore from '@/modules/auth/store.auth'
 // authuser
 //import useAuthStore from '@/store/store.auth'
 
@@ -15,37 +14,18 @@ const PageLogin = () => {
     password: '',
   })
   // auth user
-  //const {authUser, setAuth} = useAuthStore();
+  const {authUser, loginAct} = useAuthStore();
 
   const navigate = useNavigate();
 
-  // firebase login
-  function login() {
-
-    signInWithEmailAndPassword(auth, user.email, user.password)
-      .then((userCredential) => {
-        const currentUser = userCredential.user;
-        console.log(currentUser);
-        setUser({
-          email: '',
-          password: '',
-        });
-        // set authUser in state
-        //setAuth(currentUser);
-
-        navigate('/')
-      })
-      .catch((error) => {
-        console.log(`${error.code} ${error.message}`);
-      });
-  }
 
   function handSubmit(event) {
     event.preventDefault();
 
     // login
     console.log('lets login : ', user);
-    login();
+    loginAct(user, navigate, setUser);
+    
   }
 
   return (

@@ -1,11 +1,17 @@
 import {create} from 'zustand'
 import {createUserWithEmailAndPassword, signInWithPopup} from 'firebase/auth'
+import {signInWithEmailAndPassword} from 'firebase/auth'
+import {auth, googleProvider} from '@/firebase/firedb'
+import Cookies from 'universal-cookie'
+
+const cookies = new Cookies();
 
 const useAuthStore = create((set, get) => ({
   authUser: null,
 
   setAuth: (newUser) => set((state) => ({...state, authUser: newUser})),
 
+  // /register
   async registerAct(data) {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
@@ -21,6 +27,44 @@ const useAuthStore = create((set, get) => ({
         )
       }) 
   },
+
+  // /login
+  async loginAct(data, navigate, setUser) {
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        const currentUser = userCredential.user;
+        console.log(currentUser);
+        setUser({
+          email: '',
+          password: '',
+        });
+
+        // store token in cookie
+        cookies.set('auth-token', currentUser.refreshToken);
+
+        navigate('/')
+      })
+      .catch((error) => {
+        console.log(`${error.code} ${error.message}`);
+      });
+  },
+
+  // login with google
+  loginWithGoogleAct(navigate) {
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        const user = result.user;
+        console.log('signed in with google!')
+        //console.log(result);
+        //console.log(result.user.refreshToken)
+        cookies.set('auth-token', user.refreshToken);
+
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
 }));
 
 // subscribe

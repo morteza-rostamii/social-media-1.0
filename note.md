@@ -1,8 +1,32 @@
 <!-- 
 
+# firebase and react pagination:
+==
+
+# creating User_modal upon regisnter:
+==
+
+# 
+
+# show posts that are users subs:
+== 
+  # else: show random posts
 
 
- -->
+
+
+
+
+
+
+
+
+
+
+# real-time firebase:
+==
+
+
 
 
 
