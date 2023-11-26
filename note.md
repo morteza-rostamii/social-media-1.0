@@ -31,8 +31,107 @@
 # firebase relations:
 ==
 
+# react nested comments:
+==
+
+# each user can like once: 
+# post.likes[user-1, user-2]
+
+if (user-1 exists in post.likes) 
+  # like button red
+  # click again
+    # remove user-1 from post.likes
+    # change color 
+
+----------------------------------
+
+const comments: [
+  {
+    id: 0,
+  },
+  {
+    id: 1,
+    parent: 0,
+  },
+  {
+    id: 2,
+    parent: 1,
+  },
+  {
+    id: 3,
+  }
+]
+
+# loop through comments[] and put children on parent.
+
+# comment-1
+  # comment-5
+    # comment-6
+  # comment-3
+# comment-2
+
+# loop throuhg comments
+
+# create object: 
+{
+  parentId: {
+    parentId: Comment,
+    children: 
+  }
+}
+
+----------------------------------
+
+# how to loop a nested structure:
+==
+
+{
+  a: {
+    id: 0,
+    children: [
+      {
+        id: 1,
+        children: [
+          {
+            id: 2,
+          }
+        ]
+      }
+    ]
+  },
+
+  b: {
+    id: 3,
+    children: [
+      {
+        id: 4,
+      }
+    ]
+  }
+}
+
+----------------------------------
+
+# @reply to: comment x
+==
+
+# each comment has: parent.id
+const element = document.querySelector('#parent.id');
+element.scrollIntoView();
+
+----------------------------------
 
 
+
+----------------------------------
+
+----------------------------------
+
+----------------------------------
+
+----------------------------------
+
+----------------------------------
 
 
 

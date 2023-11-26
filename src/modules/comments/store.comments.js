@@ -6,6 +6,7 @@ import { Post } from '@/schemas/schema';
 
 import useAuthStore from '@/modules/auth/store.auth'
 import { fetchProfileByUserId } from '../profiles/data.profiles';
+import {fetchCommentById} from '@/modules/comments/data.comments'
 
 // reference to blogs_collection
 const commentsCollectionRef = collection(firestore, 'comments');
@@ -77,7 +78,7 @@ const useCommentsStore = create((set, get) => ({
   }, */
 
   // Get: /blogs
-  async fetchInitComments(page=1, lim=4) {
+  async fetchInitComments(page=1, lim=44) {
     
     try {
       //const querySnapshot = await getDocs(query(collection(db, 'users'), limit(5)));
@@ -101,6 +102,22 @@ const useCommentsStore = create((set, get) => ({
         const profile =  await fetchProfileByUserId(comment.user);
         comment.user = profile;
       });
+
+      // get parent object
+      async function getParentComment() {
+        if (newComments?.length) {
+          for (let i=0; i < newComments.length; i++) {
+            console.log(newComments)
+            const comment = newComments[i];
+            if (comment.parent) {
+              const parentDoc = await fetchCommentById(comment.parent);
+              newComments[i].parent = parentDoc;
+            }
+          }
+        }
+      }
+
+      await getParentComment();
 
       set(state => ({
         ...state, 
@@ -212,6 +229,11 @@ const useCommentsStore = create((set, get) => ({
 
       await updatePostDoc(postDoc, postDocRef);
       console.log('comment added to posts!!');
+
+      // update ui_state with new comment
+      const createdComment = await fetchCommentById(newCommentId);
+
+      set(state => ({...state, comments: [...state.comments, createdComment]}));
 
     } catch(error) {
       console.log(error.message);

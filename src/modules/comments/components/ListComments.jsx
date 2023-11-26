@@ -14,6 +14,7 @@ const ListComments = ({
     (() => fetchInitComments())();
   });
 
+  console.log(comments)
   return (
     <div
     className='
@@ -27,9 +28,10 @@ const ListComments = ({
           <CardComment 
           key={comment.id}
           comment={comment}
+          postId={postId}
           />
         ))
-      ): ''
+      ): <>fetching comments</>
     }      
     </div>
   )

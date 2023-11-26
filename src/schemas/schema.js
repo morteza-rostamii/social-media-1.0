@@ -5,7 +5,7 @@ export class Post {
   constructor({
     body, 
     image,
-    numOfLikes,
+    likes,
     numOfComments,
     //createdAt, 
     //updatedAt,
@@ -14,7 +14,7 @@ export class Post {
   }) {
     this.body= body || '';
     this.image= image || '';
-    this.numOfLikes= numOfLikes || 0;
+    this.likes= likes || [];
     this.numOfComments= numOfComments || 0;
     this.createdAt= serverTimestamp();
     this.updatedAt= serverTimestamp();

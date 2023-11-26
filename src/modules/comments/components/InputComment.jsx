@@ -8,8 +8,11 @@ import useCommentsStore from '../store.comments';
 
 const InputComment = ({
   postId,
-}) => {
-  const [commentInput, setCommentInput] = useState(new Comment({}));
+  parentId='',
+}) => {  
+  const [commentInput, setCommentInput] = useState(new Comment({
+    parent: parentId || '',
+  }));
   const {authUser} = useAuthStore();
   const {createCommentAct} = useCommentsStore();
 
