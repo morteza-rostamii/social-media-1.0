@@ -37,4 +37,4 @@ export const firestore = getFirestore(app);
 // storage
 export const storage = getStorage(app);
 
-console.log('firebase is on !!');
+//console.log('firebase is on !!');

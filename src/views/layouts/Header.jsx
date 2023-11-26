@@ -47,6 +47,7 @@ const Header = () => {
     flex items-center justify-between
     container mx-auto
     p-3 bg-slate-50
+    mb-8
     '
     >
       <div

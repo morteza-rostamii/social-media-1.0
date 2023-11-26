@@ -56,9 +56,20 @@ export class Profile {
 
 // Comment
 
-class Comment {
+export class Comment {
 
-  constructor() {
-    
+  constructor({
+    body,
+    user,
+    replies,
+    parent,
+  }) {
+    this.body = body || '';
+    this.createdAt = serverTimestamp();
+    this.updatedAt = serverTimestamp();
+
+    this.user = user || '';
+    this.replies = replies || [];
+    this.parent = parent || '';
   }
 }

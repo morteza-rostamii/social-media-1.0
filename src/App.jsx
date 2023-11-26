@@ -10,6 +10,7 @@ import useAuthStore from '@/modules/auth/store.auth'
 import {onAuthStateChanged} from 'firebase/auth'
 import {auth} from '@/firebase/firedb'
 import usePostsStore from './modules/posts/store.post'
+import PageSinglePost from './views/pages/PageSinglePost'
 
 function App() {
   const {authUser, setAuth} = useAuthStore();
@@ -18,7 +19,7 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log('we have a logged in user!!!');
+        //console.log('we have a logged in user!!!');
         //console.log(user);
         setAuth(user);
       } 
@@ -41,6 +42,7 @@ function App() {
         <Route
         element={<LayMain/>}
         >
+          {/* /home */}
           <Route
           path={'/'}
           element={(() => {
@@ -51,6 +53,7 @@ function App() {
           >
           </Route>          
 
+          {/* /register */}
           <Route
           path={'/register'}
           element={(() => {
@@ -61,6 +64,7 @@ function App() {
           >
           </Route>
 
+          {/* /login */}
           <Route
           path={'/login'}
           element={(() => {
@@ -71,6 +75,12 @@ function App() {
           >
           </Route>
 
+          {/* /posts/:id */}
+          <Route
+          path='/posts/:id'
+          element={<PageSinglePost/>}
+          >
+          </Route>
           
         </Route>
       </Routes>

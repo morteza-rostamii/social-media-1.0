@@ -5,6 +5,8 @@ import {Button} from '@chakra-ui/react'
 import { HiMiniHandThumbUp } from "react-icons/hi2";
 import { HiChatBubbleLeftRight } from "react-icons/hi2";
 
+import {Link} from 'react-router-dom'
+
 const CardPost_a = ({
   post,
 }) => {
@@ -26,14 +28,18 @@ const CardPost_a = ({
         maxHeight: '800px'
       }}
       >
-        <img 
-        className='
-        aspect-square
-        object-cover
-        w-full
-        '
-        src={post?.img || 'https://placehold.co/400'} 
-        alt="" />
+        <Link
+        to={`/posts/${post.id}`}
+        >
+          <img 
+          className='
+          aspect-square
+          object-cover
+          w-full
+          '
+          src={post?.img || 'https://placehold.co/400'} 
+          alt="" />
+        </Link>
 
         {/* actions */}
         <div

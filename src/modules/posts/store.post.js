@@ -1,6 +1,6 @@
 import {create} from 'zustand'
 import {firestore} from '@/firebase/firedb'
-import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot, Timestamp, limit, startAfter } from 'firebase/firestore'
+import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot, Timestamp, limit, startAfter, getDoc } from 'firebase/firestore'
 //import { getDocFromResponse } from '@/utils/utils.fixdata';
 import { Post } from '@/schemas/schema';
 
@@ -11,6 +11,7 @@ const postsCollectionRef = collection(firestore, 'posts');
 
 const usePostsStore = create((set, get) => ({
   posts: [], // [Post]
+  singlePost: null, //Post
   lastDoc: null, // last post fetched
 
   // create post data
@@ -29,15 +30,12 @@ const usePostsStore = create((set, get) => ({
   // update posts on new post added
   // runs on any request: get, put, post, delete
   onPostsUpdate() {
-
-
-
     const unsub = onSnapshot(postsCollectionRef, (snapShot) => {
 
       // check if collection size has changed!!
       //snapShot.size > 0
       if (get().posts !== null) {
-        console.log('new post added!!');
+        //console.log('new post added!!');
   
 
 
@@ -63,10 +61,10 @@ const usePostsStore = create((set, get) => ({
         }
 
         // if: a doc is created add the doc to front
-        console.log('before update with new doc!!-----')
-        console.log(data, '----', createdDoc)
+        //console.log('before update with new doc!!-----')
+        //console.log(data, '----', createdDoc)
         if (createdDoc[0]) {
-          console.log('update with new doc!!')
+          //console.log('update with new doc!!')
 
           // check to see new item already exist in state or not
           const doesExist = get().posts.some(p => p.id === createdDoc[0].id);
@@ -137,6 +135,25 @@ const usePostsStore = create((set, get) => ({
         // if: docs empty =: lastDoc = undefined
         lastDoc: docs[docs.length - 1],
       }));
+  },
+
+  async fetchSinglePost(postId) {
+    try { 
+      const docRef = doc(postsCollectionRef, postId);
+      const docSnapshot = await getDoc(docRef);
+
+      let document = null;
+      if (docSnapshot.exists) {
+        document = docSnapshot.data();
+      }
+      else {
+        console.log('no such doc!!');
+      }
+
+      set(state => ({...state, singlePost: document}));
+    } catch(error) {
+      console.log(error.message);
+    }
   },
 
   // get published blogs
