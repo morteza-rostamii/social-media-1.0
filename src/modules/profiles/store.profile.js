@@ -1,19 +1,19 @@
 import {create} from 'zustand'
 import {firestore} from '@/firebase/firedb'
 import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot} from 'firebase/firestore'
-import { getDocFromResponse } from '@/utils/utils.fixdata';
+//import { getDocFromResponse } from '@/utils/utils.fixdata';
 
 // reference to blogs_collection
-const usersCollectionRef = collection(firestore, 'blogs');
+const profilesCollectionRef = collection(firestore, 'profiles');
 
-const useUsersStore = create((set, get) => ({
+const useProfilesStore = create((set, get) => ({
   users: [],
   
   // Get: /users/:username
   async searchUsers() {
     
     try {
-      const data = await getDocs(usersCollectionRef);          
+      const data = await getDocs(profilesCollectionRef);          
 
       const docs = data.docs.map((doc) => ({
         ...doc.data(),
@@ -27,27 +27,17 @@ const useUsersStore = create((set, get) => ({
   },
   
   // Post: /blogs
-  async createUser({
-    username= '',
-    age= 0,
-    img= '',
-    status= false, // online/offline
-    lastOnline= new Date().now(),
-    createdAt= new Date().now(),
-    updatedAt= new Date().now(),
-
-    posts= [], // [Post:id]
-    subscriptions= []// [User:id],
-    }) {
-    addDoc(usersCollectionRef, {title, body})
+  async createProfile(data) {
+    
+    addDoc(profilesCollectionRef, data)
       .then(async (ref) => {
         
-        console.log('success createing blog!! ', ref.id);
+        console.log('success createing profile!! ', ref.id);
 
         // update state
-        const newDoc = await getDocFromResponse(firestore, 'blogs', ref.id);
-        console.log(newDoc);
-        set(state => ({...state, blogs: [...state.blogs, newDoc]}));
+        //const newDoc = await getDocFromResponse(firestore, 'blogs', ref.id);
+        //console.log(newDoc);
+        //set(state => ({...state, blogs: [...state.blogs, newDoc]}));
       })
       .catch((error) => {
         console.log(error.message);
@@ -108,6 +98,6 @@ const useUsersStore = create((set, get) => ({
 }));
 
 // subscribe
-useUsersStore.subscribe((state) => console.log(state));
+useProfilesStore.subscribe((state) => console.log(state));
 
-export default useUsersStore
+export default useProfilesStore

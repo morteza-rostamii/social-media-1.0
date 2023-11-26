@@ -7,9 +7,10 @@ import {useNavigate} from 'react-router-dom'
 
 // components
 import {Link} from 'react-router-dom'
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Button, ButtonGroup, IconButton } from '@chakra-ui/react'
 import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
 import { FaArrowRightToBracket } from "react-icons/fa6";
+import { BiLogoReddit } from "react-icons/bi";
 
 const Header = () => {
   const {authUser} = useAuthStore();
@@ -53,12 +54,15 @@ const Header = () => {
       flex gap-3
       '
       >
-        <Button
+        <IconButton
         variant='outline'
         colorScheme='cyan'
+        isRound={true}
+        as={Link}
+        to={'/'}
         >
-          <Link to='/'>Home</Link>
-        </Button>
+          <BiLogoReddit size={40}/>
+        </IconButton>
       </div>
       <nav
       className='

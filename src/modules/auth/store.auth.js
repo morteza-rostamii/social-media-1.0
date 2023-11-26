@@ -4,6 +4,9 @@ import {signInWithEmailAndPassword} from 'firebase/auth'
 import {auth, googleProvider} from '@/firebase/firedb'
 import Cookies from 'universal-cookie'
 
+import useProfilesStore from '../profiles/store.profile'
+import { Profile } from '@/schemas/schema'
+
 const cookies = new Cookies();
 
 const useAuthStore = create((set, get) => ({
@@ -17,8 +20,12 @@ const useAuthStore = create((set, get) => ({
       .then((userCredential) => {
         // returns the signed up user
         const currentUser = userCredential.user;
-        console.log(currentUser);
+        console.log(currentUser.uid);
         
+        const profile = new Profile({user: currentUser.uid});
+        // create profile
+        useProfilesStore.getState().createProfile({...profile});
+
       })
       .catch((error) => {
         console.log(
@@ -37,7 +44,7 @@ const useAuthStore = create((set, get) => ({
         setUser({
           email: '',
           password: '',
-        });
+        }); 
 
         // store token in cookie
         cookies.set('auth-token', currentUser.refreshToken);
@@ -58,6 +65,11 @@ const useAuthStore = create((set, get) => ({
         //console.log(result);
         //console.log(result.user.refreshToken)
         cookies.set('auth-token', user.refreshToken);
+
+        const profile = new Profile({user: user.uid});
+        // create profile
+        // firebase only accepts object literal
+        useProfilesStore.getState().createProfile({...profile});
 
         navigate('/');
       })
