@@ -78,7 +78,7 @@ const useCommentsStore = create((set, get) => ({
   }, */
 
   // Get: /blogs
-  async fetchInitComments(page=1, lim=44) {
+  async fetchInitComments(page=1, lim=10) {
     
     try {
       //const querySnapshot = await getDocs(query(collection(db, 'users'), limit(5)));
@@ -98,20 +98,19 @@ const useCommentsStore = create((set, get) => ({
       });
 
       // get user_profile for each comment
-      newComments.forEach(async (comment) => {
+      /* newComments.forEach(async (comment) => {
         const profile =  await fetchProfileByUserId(comment.user);
         comment.user = profile;
-      });
+      }); */
 
       // get parent object
       async function getParentComment() {
         if (newComments?.length) {
           for (let i=0; i < newComments.length; i++) {
-            console.log(newComments)
             const comment = newComments[i];
             if (comment.parent) {
               const parentDoc = await fetchCommentById(comment.parent);
-              newComments[i].parent = parentDoc;
+              newComments[i].parentDoc = parentDoc;
             }
           }
         }
@@ -191,8 +190,12 @@ const useCommentsStore = create((set, get) => ({
   },
   
   // Post: /blogs
-  async createCommentAct(data, postId) {
+  async createCommentAct(data, postId, parentId) {
     data.user = useAuthStore.getState().authUser.uid;
+
+    data.parent = parentId ? parentId : null; 
+    
+    console.log(data, postId, parentId)
 
     try {
       const docRef = await addDoc(commentsCollectionRef, data);

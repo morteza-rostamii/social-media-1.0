@@ -48,27 +48,29 @@ if (user-1 exists in post.likes)
 const comments: [
   {
     id: 0,
+    name: comment-0,
   },
   {
     id: 1,
+    name: comment-1,
     parent: 0,
   },
   {
     id: 2,
+    name: comment-2
     parent: 1,
   },
   {
     id: 3,
-  }
+    name: comment-3
+  },
 ]
 
-# loop through comments[] and put children on parent.
-
-# comment-1
-  # comment-5
-    # comment-6
-  # comment-3
-# comment-2
+--
+comment-0
+  comment-1
+    comment-2
+comment-3
 
 # loop throuhg comments
 
@@ -119,13 +121,34 @@ const comments: [
 const element = document.querySelector('#parent.id');
 element.scrollIntoView();
 
-----------------------------------
+
+
+
+
+
+
+
+
+
 
 
 
 ----------------------------------
 
-----------------------------------
+# nested comments:
+==
+
+# data structures comming from db:
+
+# data sctructure to render:
+
+# ui problems:
+  # nesting and indentation
+  # stop neting level
+
+-----
+
+# 
 
 ----------------------------------
 
@@ -133,7 +156,40 @@ element.scrollIntoView();
 
 ----------------------------------
 
+----------------------------------
 
+----------------------------------
+
+[
+  {
+    id: 0,
+    level: 0,
+    children: [
+      {
+        id: 1,
+        level: 1,
+        children: [
+          {
+            id: 4,
+            level: 2,
+            children: []
+          }
+        ]
+      },
+      {
+        id: 3,
+        level: 1,
+        children: []
+      },
+    ]
+  },
+
+  {
+    id: 2,
+    level: 0,
+    children: []
+  }
+]
 
 
 
@@ -150,6 +206,69 @@ element.scrollIntoView();
 
 
  <!-- 
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+# nested comments section:
+--
+
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
  /* 
 const ModalCreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -270,4 +389,3 @@ const ModalCreatePost = () => {
 } */
  
  
-  -->

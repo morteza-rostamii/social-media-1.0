@@ -3,55 +3,82 @@ import React from 'react'
 import {Avatar, Button, IconButton} from '@chakra-ui/react'
 import InputComment from './InputComment'
 import { truncateText } from '@/gg/utils/utils.editData'
+import InputReply from './InputReply'
+import CardReply from './CardReply'
 
 const CardComment = ({
+  type='',
   comment,
+  comments,
   postId,
 }) => {
 
-  console.log('c------', comment.parent)
+  console.log('CardComment: ', comments);
+  function renderReplies() {
 
-  //if (!comment.parent.body) return <>loading..</> 
+    const replies = comments.filter((reply) => {
+      //console.log(reply , comment.id)
+      return reply.parent === comment.id;
+    })
 
-  return (
-    <div
-    className='
-    flex gap-6 items-center
-    bg-white p-3 rounded-md
-    '
-    >
-      <div><Avatar src={comment?.user?.avatar || ''} alt='comment'/></div>
-
-      <div>
+    return (
+      replies && replies.length
+      ?(
         <div
+        id='replies'
         className='
-        text-blue-500
+        flex flex-col gap-4
+        pl-6 border-l-2
         '
         >
           {
-            comment?.parent?.body
-            ? `reply to: ${truncateText(comment.parent.body, 50)}`
-            : ''
+            replies.map((reply) => (
+              <CardComment
+              type='reply'
+              key={reply.id}
+              comment={reply}
+              comments={comments}
+              postId={postId}
+              />
+            ))
           }
         </div>
-        <div>
-          date
-        </div>
-        <div>
+      ):(
+        <></>
+      )
+    )
+  }
+  
+  return (
+    <div
+    id='card-comment'
+    className={`
+    flex flex-col gap-3 rounded-md
+    ${type !== 'reply' ? 'p-4' : ''}
+    `}
+    >
+      <div
+      id='card-comment-top'
+      className='
+      flex gap-6 items-center mt-2
+      bg-white p-2 rounded-md
+      '
+      >
+        <p
+        className={`
+        flex-1
+        text-gray-600
+        ${type !== 'reply' ? 'font-semibold text-black' : ''}
+        `}
+        >
           {comment.body}
-        </div>
-        <div>
-          {/* <Button>
-            reply
-          </Button> */}
-
-          <InputComment 
-          postId={postId}
-          parentId={comment.id}
-          />
-        </div>
+        </p>
+        <InputReply
+        postId={postId}
+        parentId={comment.id}
+        />
       </div>
-
+      {renderReplies()}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useCommentsStore from '../store.comments'
 
 import useRunOnce from '@/gg/hooks/useRunOnce'
@@ -9,30 +9,38 @@ const ListComments = ({
 }) => {
 
   const {comments, fetchInitComments} = useCommentsStore();
+  const [topLevelComments, setTopLevelComments] = useState([]);
 
   useRunOnce(() => {
-    (() => fetchInitComments())();
+    (async () => await fetchInitComments())();
   });
 
-  console.log(comments)
+  console.log('cooommm', comments)
+  useEffect(() => {
+    if (topLevelComments.length) return;
+    const filtered = comments.filter((comment) => comment.parent === null);
+    setTopLevelComments([...filtered]);
+  }, [comments]);
+
   return (
     <div
     className='
     flex flex-col gap-6
     '
     >
-    {
-      comments && comments.length
-      ? (
-        comments.map((comment) => (
-          <CardComment 
-          key={comment.id}
-          comment={comment}
-          postId={postId}
-          />
-        ))
-      ): <>fetching comments</>
-    }      
+      {
+        comments.length && topLevelComments.length
+        ? (
+          topLevelComments.map((comment) => (
+            <CardComment
+            key={comment.id}
+            comment={comment}
+            comments={comments}
+            postId={postId}
+            />
+          ))
+        ): 'Loading...'
+      }
     </div>
   )
 }

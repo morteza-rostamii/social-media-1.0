@@ -59,17 +59,17 @@ export class Profile {
 export class Comment {
 
   constructor({
-    body,
-    user,
-    replies,
-    parent,
+    body= '',
+    user= null,
+    replies= [],
+    parent= null,
   }) {
-    this.body = body || '';
+    this.body = body;
     this.createdAt = serverTimestamp();
     this.updatedAt = serverTimestamp();
 
-    this.user = user || '';
-    this.replies = replies || [];
-    this.parent = parent || '';
+    this.user = user;
+    this.replies = replies;
+    this.parent = parent;
   }
 }

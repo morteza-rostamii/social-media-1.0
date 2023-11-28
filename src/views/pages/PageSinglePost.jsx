@@ -22,7 +22,7 @@ const PageSinglePost = () => {
       id='page-single-post-wrap'
       className='
       flex flex-col gap-12 p-4
-      max-w-3xl mx-auto bg-slate-100
+      max-w-3xl mx-auto bg-slate-50
       '
       >
         {/* single post */}

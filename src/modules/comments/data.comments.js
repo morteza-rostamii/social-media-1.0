@@ -4,7 +4,6 @@ import {firestore} from '@/firebase/firedb'
 const commentsCollectionRef = collection(firestore, 'comments');
 
 export async function fetchCommentById(commentId) {
-  console.log('lover:: ', commentId)
   const docRef = doc(commentsCollectionRef, commentId);
   const docSnapshot = await getDoc(docRef);
 

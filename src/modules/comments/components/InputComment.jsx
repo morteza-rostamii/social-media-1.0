@@ -10,9 +10,7 @@ const InputComment = ({
   postId,
   parentId='',
 }) => {  
-  const [commentInput, setCommentInput] = useState(new Comment({
-    parent: parentId || '',
-  }));
+  const [commentInput, setCommentInput] = useState(new Comment({}));
   const {authUser} = useAuthStore();
   const {createCommentAct} = useCommentsStore();
 
@@ -27,7 +25,7 @@ const InputComment = ({
       e.preventDefault();
 
       if (commentInput.body) {
-        await createCommentAct(commentInput, postId);
+        await createCommentAct(commentInput, postId, parentId);
         console.log('made a comment!')
         setCommentInput(new Comment({}));
         textareaRef.current.value = '';
