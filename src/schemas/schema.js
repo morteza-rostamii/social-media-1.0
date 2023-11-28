@@ -61,15 +61,17 @@ export class Comment {
   constructor({
     body= '',
     user= null,
-    replies= [],
+    //replies= [],
     parent= null,
+    postId= '',
   }) {
     this.body = body;
     this.createdAt = serverTimestamp();
     this.updatedAt = serverTimestamp();
 
     this.user = user;
-    this.replies = replies;
+    this.postId = postId;
+    //this.replies = replies;
     this.parent = parent;
   }
 }
