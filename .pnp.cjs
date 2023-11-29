@@ -45,6 +45,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:18.2.0"],\
           ["react-firebase-hooks", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:5.1.1"],\
+          ["react-hot-toast", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:2.4.1"],\
           ["react-icons", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:4.12.0"],\
           ["react-infinite-scroll-component", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:6.1.0"],\
           ["react-infinite-scroller", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:1.2.6"],\
@@ -6258,6 +6259,28 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["goober", [\
+      ["npm:2.1.13", {\
+        "packageLocation": "../../../../.yarn/berry/cache/goober-npm-2.1.13-7afde46601-10c0.zip/node_modules/goober/",\
+        "packageDependencies": [\
+          ["goober", "npm:2.1.13"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:20e59d69eb9cce06e9d909db0559686ced10e14587981a731e303086dacb3f561b9c7639c778c8a678ab4d7e24c8ba8e0fa326ee7d6422ee1cbb452bc99f9ed8#npm:2.1.13", {\
+        "packageLocation": "./.yarn/__virtual__/goober-virtual-529e21f068/5/.yarn/berry/cache/goober-npm-2.1.13-7afde46601-10c0.zip/node_modules/goober/",\
+        "packageDependencies": [\
+          ["goober", "virtual:20e59d69eb9cce06e9d909db0559686ced10e14587981a731e303086dacb3f561b9c7639c778c8a678ab4d7e24c8ba8e0fa326ee7d6422ee1cbb452bc99f9ed8#npm:2.1.13"],\
+          ["@types/csstype", null],\
+          ["csstype", null]\
+        ],\
+        "packagePeers": [\
+          "@types/csstype",\
+          "csstype"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["gopd", [\
       ["npm:1.0.1", {\
         "packageLocation": "../../../../.yarn/berry/cache/gopd-npm-1.0.1-10c1d0b534-10c0.zip/node_modules/gopd/",\
@@ -7847,6 +7870,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:18.2.0"],\
           ["react-firebase-hooks", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:5.1.1"],\
+          ["react-hot-toast", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:2.4.1"],\
           ["react-icons", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:4.12.0"],\
           ["react-infinite-scroll-component", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:6.1.0"],\
           ["react-infinite-scroller", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:1.2.6"],\
@@ -8038,6 +8062,33 @@ const RAW_RUNTIME_STATE =
         ],\
         "packagePeers": [\
           "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-hot-toast", [\
+      ["npm:2.4.1", {\
+        "packageLocation": "../../../../.yarn/berry/cache/react-hot-toast-npm-2.4.1-923d48e94b-10c0.zip/node_modules/react-hot-toast/",\
+        "packageDependencies": [\
+          ["react-hot-toast", "npm:2.4.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:2.4.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-hot-toast-virtual-20e59d69eb/5/.yarn/berry/cache/react-hot-toast-npm-2.4.1-923d48e94b-10c0.zip/node_modules/react-hot-toast/",\
+        "packageDependencies": [\
+          ["react-hot-toast", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:2.4.1"],\
+          ["@types/react", "npm:18.2.38"],\
+          ["@types/react-dom", "npm:18.2.16"],\
+          ["goober", "virtual:20e59d69eb9cce06e9d909db0559686ced10e14587981a731e303086dacb3f561b9c7639c778c8a678ab4d7e24c8ba8e0fa326ee7d6422ee1cbb452bc99f9ed8#npm:2.1.13"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:2a681195a09b818347b77cf5e00d7c4448c5b5ef15cf02801bfe93a52fff37383265c33cc725ca65006422b50c46e36dea015c535adc8c953f2b50b13e878da4#npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
           "react"\
         ],\
         "linkType": "HARD"\

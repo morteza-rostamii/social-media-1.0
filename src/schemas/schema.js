@@ -75,3 +75,17 @@ export class Comment {
     this.parent = parent;
   }
 }
+
+// Notification
+
+class Notification {
+
+  constructor({
+    text= '',
+    userId= '',
+
+  }) {
+    this.text = text;
+    this.userId = userId;
+  }
+}

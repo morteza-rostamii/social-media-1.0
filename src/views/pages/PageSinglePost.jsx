@@ -43,13 +43,13 @@ console.log(singlePost)
                 w-full
                 '
                 >
-                  {/* <img 
+                  <img 
                   className='
-                  w-full
+                  w-full max-h-80
                   object-cover
                   '
                   src={singlePost?.img} 
-                  alt={'single post'} /> */}
+                  alt={'single post'} />
                 </div>
                 <p>
                   {singlePost?.body}

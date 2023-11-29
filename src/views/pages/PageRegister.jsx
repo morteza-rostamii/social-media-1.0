@@ -1,32 +1,115 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import {Link, useNavigate} from 'react-router-dom'
-import {FaGoogle} from 'react-icons/fa'
+
 import useAuthStore from '@/modules/auth/store.auth';
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import {Link, useNavigate} from 'react-router-dom'
+import FormRegister from '@/modules/auth/components/FormRegister';
+import FormAvatarUpload from '@/modules/auth/components/FormAvatarUpload';
+import useFormValidation from '@/modules/auth/hooks/useFormValidation';
 
 const PageRegister = () => {
   const [user, setUser] = useState({
     username: '',
     email: '',
     password: '',
+    avatar: null,
   });
+
+  const {errors, validateForm} = useFormValidation(user);
+
+  // form's steps:
+  const [step, setStep] = useState(0);
+  /* const [forms, setForms] = useState([
+    <FormRegister 
+    username={user.username}
+    email={user.email}
+    password={user.password}
+    setUser={setUser}
+    handGoNext={handGoNext}
+    />,
+    <FormAvatarUpload
+    avatar={user.avatar}
+    setUser={setUser}
+    handGoBack={handGoBack}
+    />
+  ]); */
+
   const {registerAct, loginWithGoogleAct} = useAuthStore();
 
   const navigate = useNavigate();
 
   // register with email and password
-  async function register() {
+  function registerUser() {
 
-    registerAct(user)
-    setUser({
-      username: '', 
-      email: '',
-      password: '',
+    // sets error state
+    const isThereErrors = validateForm();
+
+    window.alert(errors.avatar);
+    if (errors.username || errors.email || errors.password) {
+      alert('complete the form!');
+    }
+    
+    // if: no errors =: returns true.
+    if (!isThereErrors) return;
+
+    const callBackAfterRegister = () => {
+      setUser({
+        username: '', 
+        email: '',
+        password: '',
+      });
+      navigate('/login')
+    }
+
+    registerAct({
+      data: user,
+      file: user.avatar,
+      callBack: callBackAfterRegister,
     });
-    navigate('/login')
   }
+
+  function handGoNext() {
+    if (step < 1) setStep(c => ++c);
+  }
+
+  function handGoBack() {
+    console.log('back', step)
+    if (step > 0) setStep(c => --c);
+  }
+
+  useEffect(() => {
+    validateForm();
+  }, [
+    user.username,
+    user.email,
+    user.password,
+  ]);
+
+  // set errors state on image selected: to update avatar errors
+  useEffect(() => {
+    validateForm();
+  }, [user.avatar]);
+
+  /* 
+  # components that are passed into useState([]) are not going to run again when value of some state changes!! only children inside of return() run again!! so if step changes we wet them again to have the new value of step!! basically! if we don't do this, <FormRegister/> it's going to have old values of <PageRegister/> state.
+  */
+  /* useEffect(() => {
+    setForms([
+      <FormRegister 
+      username={user.username}
+      email={user.email}
+      password={user.password}
+      setUser={setUser}
+      handGoNext={handGoNext}
+      />,
+      <FormAvatarUpload
+      avatar={user.avatar}
+      setUser={setUser}
+      handGoBack={handGoBack}
+      />
+    ]);
+  }, [step]) */
 
   return (
     <div
@@ -35,65 +118,29 @@ const PageRegister = () => {
     flex-1
     '
     >
-      <form 
-      className='
-      flex flex-col gap-8 p-4 rounded-md
-      bg-slate-100 text-center
-      '
-      onSubmit={(event) => {
-        event.preventDefault();
-
-        // signup
-        console.log(user)
-        register();
-      }} 
-
+      <div
+      id='page-register-wrap'
       >
-        <h1>
-        Register Form
-        </h1>
-        {/* <input 
-
-        placeholder="username" 
-        value={user.username}
-        onChange={(event) => setUser((c) => ({...c, username: event.target.value}))}
-        /> */}
-        <input 
-
-        placeholder="email" 
-        value={user.email}
-        onChange={(event) => setUser((c) => ({...c, email: event.target.value}))}
-        />
-        <input 
-        placeholder="password" 
-        type='password'
-        value={user.password}
-        onChange={(event) => setUser((c) => ({...c, password: event.target.value}))}
-        />
-
-        <button
-        type='submit'
-        >
-          register
-        </button>
-        <Link to='/login'>go to login</Link>
-
-        <Button
-        variant='outline'
-        colorScheme='cyan'
+        {/* {forms[step]} */}
         
-        onClick={() => loginWithGoogleAct(navigate)}
-        >
-          <span
-          className='
-          flex gap-3 items-center
-          '
-          >
-          <FaGoogle/>
-          <span>google</span>
-          </span>
-        </Button>
-      </form>
+        <FormRegister 
+        show={step === 0}
+        username={user.username}
+        email={user.email}
+        password={user.password}
+        setUser={setUser}
+        handGoNext={handGoNext}
+        errors={errors}
+        />
+        <FormAvatarUpload
+        show={step === 1}
+        user={user}
+        setUser={setUser}
+        handGoBack={handGoBack}
+        registerUser={registerUser}
+        errors={errors}
+        />
+      </div>
     </div>
   )
 }

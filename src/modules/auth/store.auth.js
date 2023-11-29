@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie'
 
 import useProfilesStore from '../profiles/store.profile'
 import { Profile } from '@/schemas/schema'
+import { uploadOneImage } from '../files/data.files'
 
 const cookies = new Cookies();
 
@@ -15,16 +16,39 @@ const useAuthStore = create((set, get) => ({
   setAuth: (newUser) => set((state) => ({...state, authUser: newUser})),
 
   // /register
-  async registerAct(data) {
+  registerAct({
+    data, 
+    file,
+    callBack,
+  }) {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         // returns the signed up user
         const currentUser = userCredential.user;
         console.log(currentUser.uid);
-        
-        const profile = new Profile({user: currentUser.uid});
-        // create profile
-        useProfilesStore.getState().createProfile({...profile});
+
+        // send email verification
+        //currentUser.sendEmailVerification();
+        //auth.signOut();
+
+        return {data, currentUser, file};
+      })
+      .then(({
+        data, currentUser, file
+      }) => {
+        // upload image
+        uploadOneImage({file: file, path: 'images'})
+          .then((downloadUrl) => {
+            console.log(downloadUrl);
+            // create profile
+            const profile = new Profile({
+              user: currentUser.uid,
+              avatar: downloadUrl,
+              username: data.username,
+            });
+            // create profile
+            useProfilesStore.getState().createProfile({...profile});
+          })
 
       })
       .catch((error) => {

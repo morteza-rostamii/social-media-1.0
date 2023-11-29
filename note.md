@@ -218,11 +218,13 @@ element.scrollIntoView();
 
 <!-- 
 
-# nested comments section:
---
+# notifications:
+==
 
 
 
+
+# When you call an async function that does not have an await inside it, the function will still return a promise.
  -->
 
 

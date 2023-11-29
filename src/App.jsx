@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import {Routes, Route, Link} from 'react-router-dom'
+import {Routes, Route, Link, Navigate} from 'react-router-dom'
+
 import LayMain from './views/layouts/LayMain'
 import PageHome from './views/pages/PageHome'
 import PageRegister from './views/pages/PageRegister'
@@ -11,23 +12,40 @@ import {onAuthStateChanged} from 'firebase/auth'
 import {auth} from '@/firebase/firedb'
 import usePostsStore from './modules/posts/store.post'
 import PageSinglePost from './views/pages/PageSinglePost'
+import PageSearch from './views/pages/PageSearch'
+import { fetchProfileByUserId } from './modules/profiles/data.profiles'
 
 function App() {
   const {authUser, setAuth} = useAuthStore();
   const {onPostsUpdate} = usePostsStore();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        //console.log('we have a logged in user!!!');
-        //console.log(user);
-        setAuth(user);
-      } 
-      else {
-        console.log('no logged in user!!');
-        setAuth(undefined);
-      }
-    })
+
+    try {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          //console.log('we have a logged in user!!!');
+          //console.log(user);
+          setAuth(user);
+          
+          // store authUser profile in localStorage
+          if (user.uid) {
+            const profile = await fetchProfileByUserId(user.uid);
+            localStorage.setItem('auth-profile', JSON.stringify(profile));
+          }
+        } 
+        else {
+          console.log('no logged in user!!');
+          setAuth(undefined);
+  
+          // remove authUser profile from local storage
+          localStorage.removeItem('auth-profile');
+        }
+      })
+      
+    } catch(error) {
+      console.log(error.message);
+    }
 
     // event: on posts[] update run this:
     const unsubOnPostsUpdate = onPostsUpdate();
@@ -48,7 +66,7 @@ function App() {
           element={(() => {
             if (authUser === null) return <>loading..</>
             else if (authUser) return <PageHome/>
-            else return <PageRegister/>
+            else return <Navigate to='/register'></Navigate>
           })()}
           >
           </Route>          
@@ -79,6 +97,13 @@ function App() {
           <Route
           path='/posts/:id'
           element={<PageSinglePost/>}
+          >
+          </Route>
+
+          {/* /search/:term */}
+          <Route
+          path='/search'
+          element={<PageSearch/>}
           >
           </Route>
           
