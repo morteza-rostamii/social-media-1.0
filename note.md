@@ -391,3 +391,87 @@ const ModalCreatePost = () => {
 } */
  
  
+
+<!-- 
+// select file and upload
+  handFileChange(event) {
+    const file = event.target.files[0];
+    this.setState(
+      {
+        // this only sets selectedImg and not other props
+        selectedImg: file,
+      },
+      async () => {
+        console.log(this.state.selectedImg);
+        
+        // file upload
+        try { 
+          
+
+          this.props.setNewPost({
+            img: downloadUrl,
+          });
+
+        } catch(error) {
+          console.log(`file upload failed!`, error.message);
+        }
+
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* 
+<FormControl>
+                  
+  <label 
+  className="
+  block mb-2 text-sm font-medium 
+  text-gray-900 
+  dark:text-white" 
+  htmlFor="file_input"
+  >
+    Upload file
+  </label>
+  <input 
+  id="file_input"
+  className="
+  block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  
+  type="file"
+  
+  ref={this.fileInputRef}
+  onChange={(e) => this.handFileChange(e)}
+  />
+
+</FormControl>
+
+<div 
+id='img-container' 
+className='
+max-h-60 overflow-hidden
+'>
+  {
+    this.props.newPost.img 
+    ? (
+      <img
+      src={this.props.newPost.img}
+      alt='uploaded image'
+      />
+    ): ('')
+  }
+</div>
+
+*/
+ -->

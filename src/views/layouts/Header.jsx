@@ -23,7 +23,7 @@ const Header = () => {
     flex items-center justify-between
     container mx-auto
     p-3 #bg-slate-50 #border-b shadow-md
-    mb-8
+    #mb-8
     '
     >
       <div

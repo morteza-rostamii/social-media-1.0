@@ -128,7 +128,7 @@ const CardPost_a = ({
         text-slate-500
         '
         colorSchema='gray'
-        color={`${hasUserLiked(post.likes, authUser.uid) ? 'red' : 'blue'}`}
+        color={`${hasUserLiked(post.likes, authUser.uid) ? 'red' : 'blue.500'}`}
         variant='ghost'
 
         isLoading={likeLoading}

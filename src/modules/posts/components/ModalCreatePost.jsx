@@ -5,6 +5,7 @@ import useAuthStore from '@/modules/auth/store.auth';
 import {ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage'
 import { storage } from '@/firebase/firedb';
 import {v4} from 'uuid'
+import toast, { Toaster } from 'react-hot-toast';
 
 // components
 import {
@@ -14,10 +15,13 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from '@chakra-ui/react'
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, IconButton } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import { Textarea } from '@chakra-ui/react'
 import { HiMiniPencilSquare } from "react-icons/hi2";
+import { HiXMark } from "react-icons/hi2";
+import FilePickerPost from './FilePickerPost';
+import { uploadOneImage } from '@/modules/files/data.files';
 
 const ModalCreatePostWrap = (Component) => {
 
@@ -38,6 +42,9 @@ const ModalCreatePostWrap = (Component) => {
   }
 }
 
+const toastCreatePostSuccess = () => toast.success('you created a post');
+const toastCreatePostError = () => toast.error('you created a post');
+
 class ModalCreatePost extends React.Component {
 
   constructor(props) {
@@ -48,7 +55,8 @@ class ModalCreatePost extends React.Component {
 
     this.state = {
       isOpen: false,
-      selectedImg: null,
+      selectedFiles: [],
+      loadingCreatePost: false,
     }
   }
 
@@ -81,62 +89,61 @@ class ModalCreatePost extends React.Component {
     }));
   }
 
+  setSelectedFiles = (files) => {
+    this.setState({
+      selectedFiles: files,
+    });
+  }
+
   async handCreatePost(event) {
     event.preventDefault();
     
-    //console.log(this.props.newPost);    
-    await this.props.createPost(this.props.newPost);
+    console.log(this.state.selectedFiles, this.props.newPost)
+    
+    // if not input
+    if (!this.props.newPost.body) {
+      toastCreatePostError();
+      return;
+    }
 
+    this.setState({
+      loadingCreatePost: true,
+    });
+
+    // upload file
+    let uploadedImgUrl = '';
+    if (this.state.selectedFiles && this.state.selectedFiles?.length) {
+      uploadedImgUrl = await uploadOneImage({
+        file: this.state.selectedFiles,
+        path: 'images',
+      });
+    }
+
+    this.props.setNewPost(c => ({
+      ...c,
+      image: uploadedImgUrl,
+    }));
+    // create post
+    await this.props.createPost(this.props.newPost);
     console.log('after post create in component!!');
 
+    // clean up
     this.handClose();
     this.props.resetNewPost();
-  }
 
-  // select file and upload
-  handFileChange(event) {
-    const file = event.target.files[0];
-    this.setState(
-      {
-        // this only sets selectedImg and not other props
-        selectedImg: file,
-      },
-      async () => {
-        console.log(this.state.selectedImg);
-        
-        // file upload
-        try { 
-          const filesDirRef = ref(storage, `images/${file.name}${v4()}`);
-          const res = await uploadBytes(
-            filesDirRef,
-            file,
-          );
-
-          console.log('success file upload!!', res);
-          // clear file input
-          this.fileInputRef.current.value = null;
-
-          console.log(res.metadata.fullPath);
-
-          const imgUrl = res.metadata.fullPath;
-          const imgRef = ref(storage, imgUrl);
-          const downloadUrl = await getDownloadURL(imgRef);
-
-          // inject the image
-          /* const img = document.createElement('img');
-          img.src = downloadUrl;
-          const imgContainer = document.querySelector('#img-container');
-          imgContainer.appendChild(img); */
-
-          this.props.setNewPost({
-            img: downloadUrl,
-          });
-
-        } catch(error) {
-          console.log(`file upload failed!`, error.message);
-        }
-
+    // stop load
+    this.setState({
+      loadingCreatePost: false,
     });
+
+    // clean file input
+    this.fileInputRef.current.value = null;
+    this.setState(c => ({
+      ...c,
+      selectedFiles: []
+    }))
+
+    toastCreatePostSuccess();
   }
 
   handTextChange = (e) => {
@@ -152,6 +159,7 @@ class ModalCreatePost extends React.Component {
 
     return (
       <>
+        {/* open modal button */}
         <div
         className='
         flex items-center justify-between
@@ -173,17 +181,43 @@ class ModalCreatePost extends React.Component {
           />
         </div>
 
+        {/* modal */}
         <Modal isOpen={this.state.isOpen} onClose={this.handClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>create a post</ModalHeader>
+            <ModalHeader
+            //borderBottom='1px solid gray'
+            display='flex'
+            alignItems='center'
+            justifyContent='space-between'
+            >
+              <p
+              className='
+              text-gray-600
+              '
+              >
+                create post
+              </p>
+              <IconButton
+              colorScheme="blue" 
+              color={'blue.500'}
+              variant='outline'
+              isRound={true}
+              onClick={this.handClose}>
+                <HiXMark size={20}/>
+              </IconButton>
+            </ModalHeader>
             <ModalBody>
               <form 
+              className='
+              flex flex-col gap-3
+              '
               onSubmit={(e) => this.handCreatePost(e)}
               >
                 <FormControl isInvalid={false}>
                   <Textarea 
                   placeholder='what do you think...'
+                  size='lg'
                   type='text' 
                   value={this.props.newPost.body} 
                   onChange={(e) => this.handTextChange(e)} 
@@ -195,56 +229,22 @@ class ModalCreatePost extends React.Component {
                   )}
                 </FormControl>
 
-                <FormControl>
-                  
-                  <label 
-                  className="
-                  block mb-2 text-sm font-medium 
-                  text-gray-900 
-                  dark:text-white" 
-                  htmlFor="file_input"
-                  >
-                    Upload file
-                  </label>
-                  <input 
-                  id="file_input"
-                  className="
-                  block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  
-                  type="file"
-                  
-                  ref={this.fileInputRef}
-                  onChange={(e) => this.handFileChange(e)}
-                  />
-
-                </FormControl>
-
-                {/* show img */}
-                <div 
-                id='img-container' 
-                className='
-                max-h-60 overflow-hidden
-                '>
-                  {
-                    this.props.newPost.img 
-                    ? (
-                      <img
-                      src={this.props.newPost.img}
-                      alt='uploaded image'
-                      />
-                    ): ('')
-                  }
-                </div>
+                <FilePickerPost
+                ref={this.fileInputRef}
+                selectedFiles={this.state.selectedFiles}
+                setSelectedFiles={this.setSelectedFiles}
+                />
 
                 <Button
+                color={'blue.500'}
+                variant='outline'
                 type='submit'
+                isLoading={this.state.loadingCreatePost}
                 >
                   send
                 </Button>
               </form>
             </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="blue" onClick={this.handClose}>Close</Button>
-            </ModalFooter>
           </ModalContent>
         </Modal>
       </>
