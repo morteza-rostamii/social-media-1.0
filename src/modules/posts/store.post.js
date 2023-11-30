@@ -5,6 +5,8 @@ import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, on
 import { Post } from '@/schemas/schema';
 
 import useAuthStore from '@/modules/auth/store.auth'
+import { fetchProfileByUserId } from '../profiles/data.profiles';
+import { toggleLikePost } from './data.posts';
 
 // reference to blogs_collection
 const postsCollectionRef = collection(firestore, 'posts');
@@ -99,9 +101,21 @@ const usePostsStore = create((set, get) => ({
         ...doc.data(),
       }));
 
+      // get user profile for each post
+      async function fetchUsersProfileForEachPost(posts) {
+        for (let i=0; i < posts.length; i++) {
+          const post = posts[i];
+          const profile = await fetchProfileByUserId(post.user);
+          posts[i].profile = profile;
+        }
+        return posts;
+      }
+
+      const editedPosts = await fetchUsersProfileForEachPost(newPosts);
+
       set(state => ({
         ...state, 
-        posts: [...newPosts],
+        posts: [...editedPosts],
         // set the last doc fetched
         lastDoc: docs[docs.length - 1],
       }));
@@ -244,6 +258,41 @@ const usePostsStore = create((set, get) => ({
       console.log(error.message);
     }
   },
+
+  async toggleLikePostAct({
+    postId, 
+    userId,
+    callback, 
+  }) {
+    try {
+      const updatedPostDoc = await toggleLikePost({
+        postId: postId, userId: userId,
+      });
+
+      set(state => {
+        const filtered = state.posts;
+        let updatedIndex = 0;
+        state.posts.forEach((post, inx) => {
+          console.log(inx)
+          if (post.id === updatedPostDoc.id) updatedIndex = inx;
+        });
+        filtered[updatedIndex].likes = updatedPostDoc.likes; 
+
+        return {
+          ...state,
+          posts: filtered,
+        }
+      })
+
+      callback();
+    } catch(error) {
+      console.log(error.message);
+    }
+  },
+
+  /* getLikesCount() {
+    return get().
+  } */
 }));
 
 // subscribe

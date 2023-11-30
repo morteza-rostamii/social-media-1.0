@@ -14,9 +14,10 @@ import usePostsStore from './modules/posts/store.post'
 import PageSinglePost from './views/pages/PageSinglePost'
 import PageSearch from './views/pages/PageSearch'
 import { fetchProfileByUserId } from './modules/profiles/data.profiles'
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
-  const {authUser, setAuth} = useAuthStore();
+  const {authUser, setAuth, setAuthProfile} = useAuthStore();
   const {onPostsUpdate} = usePostsStore();
 
   useEffect(() => {
@@ -30,8 +31,13 @@ function App() {
           
           // store authUser profile in localStorage
           if (user.uid) {
+            console.log(user.uid)
             const profile = await fetchProfileByUserId(user.uid);
-            localStorage.setItem('auth-profile', JSON.stringify(profile));
+            if (profile) {
+              console.log('get profile')
+              localStorage.setItem('auth-profile', JSON.stringify(profile));
+              setAuthProfile(profile);
+            }
           }
         } 
         else {
@@ -109,6 +115,9 @@ function App() {
           
         </Route>
       </Routes>
+
+      {/* register toaster */}
+      <Toaster/>
     </>
   )
 }

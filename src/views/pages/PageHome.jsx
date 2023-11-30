@@ -15,22 +15,27 @@ const PageHome = props => {
   const [isAuth, setIsAuth] = useState(false);
 
   return (
-    <div
+    <main
     id='page-home'
     className='
-    flex flex-col gap-8 items-center justify-center #h-full
-    container mx-auto p-4
-    bg-slate-100
+    grid place-items-center
+    container mx-auto bg-slate-50
     '
     >
-      {/* create post */}
-      <div>
-        <ModalCreatePost test='for test'/>
-      </div>
+      <div
+      id='page-home-wrap'
+      className='
+      flex flex-col gap-8 items-center justify-center p-8 max-w-lg #bg-green-50
+      '
+      >
+        {/* create post */}
+        
+        <ModalCreatePost />
 
-      {/* infinit posts scroll */}
-      <FeedPosts/>
-    </div>
+        {/* infinit posts scroll */}
+        <FeedPosts/>
+      </div>
+    </main>
   )
 }
 

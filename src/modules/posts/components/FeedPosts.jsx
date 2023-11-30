@@ -16,9 +16,17 @@ const FeedPosts = () => {
   return (
     <div
     id='home-posts-infinit'
+    className='
+    flex flex-col gap-4 items-center
+    w-full 
+    '
     >
       
       <InfiniteScroll
+      className='
+      flex flex-col w-full gap-6 #bg-red-50
+      '
+
       //data={posts}
       dataLength={posts.length}
       loader={<div>Loading...</div>}

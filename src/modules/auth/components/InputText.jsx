@@ -12,7 +12,6 @@ const InputText = ({
   errors= [],
 }) => {
 
-  console.log(errors)
   return (
     <FormControl>
       <FormLabel

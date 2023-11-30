@@ -14,7 +14,7 @@ export class Post {
   }) {
     this.body= body || '';
     this.image= image || '';
-    this.likes= likes || [];
+    this.likes= likes || []; // [User:id]
     this.numOfComments= numOfComments || 0;
     this.createdAt= serverTimestamp();
     this.updatedAt= serverTimestamp();

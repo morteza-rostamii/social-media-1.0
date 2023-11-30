@@ -7,6 +7,9 @@ import {Link, useNavigate} from 'react-router-dom'
 import FormRegister from '@/modules/auth/components/FormRegister';
 import FormAvatarUpload from '@/modules/auth/components/FormAvatarUpload';
 import useFormValidation from '@/modules/auth/hooks/useFormValidation';
+import toast, { Toaster } from 'react-hot-toast';
+
+const toastRegister = () => toast('we sent you en email');
 
 const PageRegister = () => {
   const [user, setUser] = useState({
@@ -15,6 +18,7 @@ const PageRegister = () => {
     password: '',
     avatar: null,
   });
+  const [registerLoading, setRegisterLoading] = useState(false);
 
   const {errors, validateForm} = useFormValidation(user);
 
@@ -54,13 +58,20 @@ const PageRegister = () => {
     if (!isThereErrors) return;
 
     const callBackAfterRegister = () => {
+      console.log('register callback............')
       setUser({
         username: '', 
         email: '',
         password: '',
       });
-      navigate('/login')
+      navigate('/')
+
+      setRegisterLoading(false);
+      toastRegister();
     }
+
+    // set loading
+    setRegisterLoading(true);
 
     registerAct({
       data: user,
@@ -139,6 +150,7 @@ const PageRegister = () => {
         handGoBack={handGoBack}
         registerUser={registerUser}
         errors={errors}
+        registerLoading={registerLoading}
         />
       </div>
     </div>

@@ -5,6 +5,8 @@ const profilesCollectionRef = collection(firestore, 'profiles');
 
 // profiles/:userId
 export async function fetchProfileByUserId(userId) {
+
+  if (!userId) return console.log('-----------userId not provided!!')
   // get doc ref
   const profileRef = query(
     profilesCollectionRef, 

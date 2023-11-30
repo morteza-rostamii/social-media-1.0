@@ -14,6 +14,7 @@ const FormAvatarUpload = ({
   handGoBack,
   registerUser,
   errors,
+  registerLoading,
 }) => {
 
   // register user / uploadfile and create profile:
@@ -93,6 +94,9 @@ const FormAvatarUpload = ({
         type='submit'
         variant='outline'
         colorScheme='blue'
+
+        isLoading={registerLoading}
+        loadingText='registering'
         >
           <span
           className='

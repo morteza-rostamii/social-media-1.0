@@ -17,11 +17,12 @@ import {
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import { Textarea } from '@chakra-ui/react'
+import { HiMiniPencilSquare } from "react-icons/hi2";
 
 const ModalCreatePostWrap = (Component) => {
 
   return (props) => {
-    const {authUser, } = useAuthStore();
+    const {authUser, authProfile} = useAuthStore();
     const {createPost, newPost, setNewPost, resetNewPost} = usePostsStore();
 
     const tempProps = JSON.parse(JSON.stringify(props));
@@ -30,6 +31,7 @@ const ModalCreatePostWrap = (Component) => {
     tempProps.newPost = newPost;
     tempProps.setNewPost = setNewPost;
     tempProps.resetNewPost = resetNewPost;
+    tempProps.profile = authProfile;
 
     // spread operator in passing props
     return <Component {...tempProps}/>
@@ -65,15 +67,19 @@ class ModalCreatePost extends React.Component {
 
   //=====================================
 
-  handOpen = () => this.setState(c => ({
-    ...c, 
-    isOpen: true,
-  })); 
+  handOpen = () => {
+    this.setState(c => ({
+      ...c, 
+      isOpen: true,
+    })); 
+  }
 
-  handClose = () => this.setState(c => ({
-    ...c,
-    isOpen: false,
-  }));
+  handClose = () => {
+    this.setState(c => ({
+      ...c,
+      isOpen: false,
+    }));
+  }
 
   async handCreatePost(event) {
     event.preventDefault();
@@ -145,18 +151,27 @@ class ModalCreatePost extends React.Component {
   render() {
 
     return (
-      <div>
-        <Button
-        colorScheme='cyan'
-        variant='outline'
-        borderRadius='100%'
-        width='60px'
-        height='60px'
-
-        onClick={this.handOpen}
+      <>
+        <div
+        className='
+        flex items-center justify-between
+        h-16 w-full shadow-md max-w-lg bg-white rounded-md p-4
+        cursor-pointer 
+        '
+        onClick={() => this.handOpen()}
         >
-          <FaPlus size='60'/>
-        </Button>
+          <div></div>
+          <p
+          className='
+          text-gray-600
+          '
+          >
+            what's on your mind, {this.props?.profile?.username}</p>
+          <HiMiniPencilSquare 
+          size={24}
+          color={'gray'}
+          />
+        </div>
 
         <Modal isOpen={this.state.isOpen} onClose={this.handClose}>
           <ModalOverlay />
@@ -232,7 +247,7 @@ class ModalCreatePost extends React.Component {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </div>
+      </>
     )
   }
 }

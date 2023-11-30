@@ -10,10 +10,20 @@ import { uploadOneImage } from '../files/data.files'
 
 const cookies = new Cookies();
 
+/* function getUserProfile() {
+  const userJson = localStorage.getItem('auth-profile');
+  console.log(!userJson)
+  if (!userJson || userJson === 'undefined') return {}; 
+  console.log('what the fuck!!')
+  return JSON.parse(userJson);
+} */
+
 const useAuthStore = create((set, get) => ({
   authUser: null,
+  authProfile: null,
 
   setAuth: (newUser) => set((state) => ({...state, authUser: newUser})),
+  setAuthProfile: (profile) => set(state => ({...state, authProfile: profile})),
 
   // /register
   registerAct({
@@ -48,6 +58,9 @@ const useAuthStore = create((set, get) => ({
             });
             // create profile
             useProfilesStore.getState().createProfile({...profile});
+
+            // after register
+            callBack();
           })
 
       })
@@ -60,20 +73,16 @@ const useAuthStore = create((set, get) => ({
   },
 
   // /login
-  async loginAct(data, navigate, setUser) {
+  loginAct(data, callback) {
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         const currentUser = userCredential.user;
         console.log(currentUser);
-        setUser({
-          email: '',
-          password: '',
-        }); 
 
         // store token in cookie
         cookies.set('auth-token', currentUser.refreshToken);
 
-        navigate('/')
+        callback();
       })
       .catch((error) => {
         console.log(`${error.code} ${error.message}`);
