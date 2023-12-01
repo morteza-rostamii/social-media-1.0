@@ -47,7 +47,7 @@ const useAuthStore = create((set, get) => ({
         data, currentUser, file
       }) => {
         // upload image
-        uploadOneImage({file: file, path: 'images'})
+        uploadOneImage({file: file, path: 'avatars'})
           .then((downloadUrl) => {
             console.log(downloadUrl);
             // create profile

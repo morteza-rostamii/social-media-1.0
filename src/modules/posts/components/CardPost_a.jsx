@@ -107,7 +107,7 @@ const CardPost_a = ({
           object-cover
           w-full rounded-md
           '
-          src={post?.img || 'https://placehold.co/400'} 
+          src={post?.image || ''} 
           alt="" 
           />
         </Link>

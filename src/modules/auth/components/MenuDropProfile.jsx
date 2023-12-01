@@ -14,13 +14,15 @@ import { FaArrowRightToBracket,  } from "react-icons/fa6";
 import useAuthStore from '@/modules/auth/store.auth'
 import {useNavigate} from 'react-router-dom'
 import { HiArrowRightOnRectangle } from "react-icons/hi2";
+import {signOut} from 'firebase/auth'
+import {auth} from '@/firebase/firedb'
 
 const MenuDropProfile = () => {
   const {authUser, authProfile} = useAuthStore();
   const navigate = useNavigate();
 
   function handLogout() {
-
+    console.log('logout')
     //window.alert('');
     signOut(auth)
       .then(() => {

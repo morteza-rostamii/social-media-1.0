@@ -7,6 +7,7 @@ import { Post } from '@/schemas/schema';
 import useAuthStore from '@/modules/auth/store.auth'
 import { fetchProfileByUserId } from '../profiles/data.profiles';
 import { toggleLikePost } from './data.posts';
+import { uploadOneImage } from '../files/data.files';
 
 // reference to blogs_collection
 const postsCollectionRef = collection(firestore, 'posts');
@@ -17,7 +18,7 @@ const usePostsStore = create((set, get) => ({
   lastDoc: null, // last post fetched
 
   // create post data
-  newPost: new Post({}),
+  /* newPost: new Post({}),
 
   setNewPost(data) {
     set(state => ({...state, newPost: {...state.newPost, ...data}}));
@@ -25,7 +26,7 @@ const usePostsStore = create((set, get) => ({
 
   resetNewPost() {
     set(state => ({...state, newPost: new Post({})}));
-  },
+  }, */
 
   //========================================
   
@@ -190,14 +191,32 @@ const usePostsStore = create((set, get) => ({
   },
   
   // Post: /blogs
-  async createPost(data) {
+  async createPost(data, file) {
     data.user = useAuthStore.getState().authUser.uid;
 
     try {
-      const docRef = await addDoc(postsCollectionRef, data);
+      console.log('--dooo', {...data}, file)
+
+      // upload file
+      // post with image 
+      if (file) {
+        const downloadUrl = await uploadOneImage({
+          file: file,
+          path: 'images',
+        })
+        data.image = downloadUrl;
+
+        console.log(downloadUrl, data);
+        // create post
+        const docRef = await addDoc(postsCollectionRef, {...data});
+        console.log('post with image--created!!');
+        return;
+      }
+
+      // create post without image
+      const docRef = await addDoc(postsCollectionRef, {...data});
   
       console.log(docRef, docRef.id);
-
     } catch(error) {
       console.log(error.message);
     }

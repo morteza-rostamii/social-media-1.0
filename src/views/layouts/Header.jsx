@@ -1,9 +1,6 @@
 import React from 'react'
 
 import useAuthStore from '@/modules/auth/store.auth'
-import {signOut} from 'firebase/auth'
-import {auth} from '@/firebase/firedb'
-import {useNavigate} from 'react-router-dom'
 
 // components
 import {Link} from 'react-router-dom'
@@ -14,6 +11,8 @@ import MenuDropProfile from '@/modules/auth/components/MenuDropProfile'
 //import Notifications from '@/modules/notifications/components/Notifications'
 //import Search from './Search'
 //import { HiOutlineSearch } from "react-icons/hi";
+import {auth} from '@/firebase/firedb'
+import {useNavigate} from 'react-router-dom'
 
 const Header = () => {
   const {authUser, authProfile} = useAuthStore();

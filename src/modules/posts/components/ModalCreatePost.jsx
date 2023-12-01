@@ -6,6 +6,7 @@ import {ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage'
 import { storage } from '@/firebase/firedb';
 import {v4} from 'uuid'
 import toast, { Toaster } from 'react-hot-toast';
+import { Post } from '@/schemas/schema';
 
 // components
 import {
@@ -27,14 +28,15 @@ const ModalCreatePostWrap = (Component) => {
 
   return (props) => {
     const {authUser, authProfile} = useAuthStore();
-    const {createPost, newPost, setNewPost, resetNewPost} = usePostsStore();
+    const {createPost} = usePostsStore();
+    // newPost, setNewPost,
 
     const tempProps = JSON.parse(JSON.stringify(props));
     tempProps.authUser = authUser;
     tempProps.createPost = createPost;
-    tempProps.newPost = newPost;
-    tempProps.setNewPost = setNewPost;
-    tempProps.resetNewPost = resetNewPost;
+    //tempProps.newPost = newPost;
+    //tempProps.setNewPost = setNewPost;
+    //tempProps.resetNewPost = resetNewPost;
     tempProps.profile = authProfile;
 
     // spread operator in passing props
@@ -57,20 +59,8 @@ class ModalCreatePost extends React.Component {
       isOpen: false,
       selectedFiles: [],
       loadingCreatePost: false,
+      newPost: new Post({}),
     }
-  }
-
-  // don't update state here (infinite loop)
-  // this does not on the first mount (2 times mount)
-  componentDidUpdate(prevProps, prevState) {
-    //if (prevState.count !== this.state.count) {
-    //console.log(prevProps, prevState);
-  }
-
-  componentDidMount() {
-    //console.log('mounted!!');
-    //console.log(this.props);
-    //console.log('--', this.props.newPost)
   }
 
   //=====================================
@@ -98,10 +88,8 @@ class ModalCreatePost extends React.Component {
   async handCreatePost(event) {
     event.preventDefault();
     
-    console.log(this.state.selectedFiles, this.props.newPost)
-    
     // if not input
-    if (!this.props.newPost.body) {
+    if (!this.state.newPost.body) {
       toastCreatePostError();
       return;
     }
@@ -110,48 +98,47 @@ class ModalCreatePost extends React.Component {
       loadingCreatePost: true,
     });
 
-    // upload file
-    let uploadedImgUrl = '';
-    if (this.state.selectedFiles && this.state.selectedFiles?.length) {
-      uploadedImgUrl = await uploadOneImage({
-        file: this.state.selectedFiles,
-        path: 'images',
-      });
-    }
-
-    this.props.setNewPost(c => ({
-      ...c,
-      image: uploadedImgUrl,
-    }));
     // create post
-    await this.props.createPost(this.props.newPost);
+    console.log(this.state.newPost);
+    await this.props.createPost(
+      this.state.newPost, 
+      this.state.selectedFiles[0],
+      )
+    .then(() => {
+      console.log('cleaning up!!')
+      // clean up
+      this.handClose();
+      this.setState(c => ({
+        ...c,
+        newPost: new Post({}),
+      }));
+
+      // stop load
+      this.setState({
+        loadingCreatePost: false,
+      });
+
+      // clean file input
+      this.fileInputRef.current.value = null;
+      this.setState(c => ({
+        ...c,
+        selectedFiles: []
+      }))
+
+      toastCreatePostSuccess();
+    })
+    .catch(err => console.log(err.message));
+
     console.log('after post create in component!!');
-
-    // clean up
-    this.handClose();
-    this.props.resetNewPost();
-
-    // stop load
-    this.setState({
-      loadingCreatePost: false,
-    });
-
-    // clean file input
-    this.fileInputRef.current.value = null;
-    this.setState(c => ({
-      ...c,
-      selectedFiles: []
-    }))
-
-    toastCreatePostSuccess();
   }
 
   handTextChange = (e) => {
     //console.log(e.target.value)
 
-    this.props.setNewPost({
-      body: e.target.value,
-    });
+    this.setState(c => ({
+      ...c, 
+      newPost: {...c.newPost, body: e.target.value}
+    }));
     //this.props.resetNewPost();
   }
 
@@ -219,7 +206,7 @@ class ModalCreatePost extends React.Component {
                   placeholder='what do you think...'
                   size='lg'
                   type='text' 
-                  value={this.props.newPost.body} 
+                  value={this.state.newPost.body} 
                   onChange={(e) => this.handTextChange(e)} 
                   />
                   {!false ? (

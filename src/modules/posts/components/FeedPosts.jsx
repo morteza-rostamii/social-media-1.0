@@ -38,7 +38,6 @@ const FeedPosts = () => {
           posts && posts.length
           ? (
             posts.map((post) => {
-              console.log(posts);
               return <CardPost_a key={post.id} post={post}/>
             })
           ):('')
