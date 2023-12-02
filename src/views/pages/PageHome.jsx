@@ -18,8 +18,8 @@ const PageHome = props => {
     <main
     id='page-home'
     className='
-    grid place-items-center
-    container mx-auto bg-slate-50
+    flex flex-col items-center
+    container mx-auto bg-slate-50 flex-1
     '
     >
       <div

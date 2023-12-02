@@ -15,4 +15,13 @@ html, body, #root {
 .infinite-scroll-component__outerdiv,
 .infinite-scroll-component {
   width: 100% !important;
+  overflow: hidden;
+}
+
+.infinite-scroll-component__outerdiv::-webkit-scrollbar {
+  display: none;
+}
+
+.infinite-scroll-component::-webkit-scrollbar {
+  display: none;
 }

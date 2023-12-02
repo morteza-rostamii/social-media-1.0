@@ -21,6 +21,7 @@ const CardPost_a = ({
   const {authUser} = useAuthStore();
   const {toggleLikePostAct} = usePostsStore();
   const [likeLoading, setLikeLoading] = useState(false);
+  // is post l
 
   async function handLikeToggle() {
 

@@ -33,25 +33,12 @@ const usePostsStore = create((set, get) => ({
   // update posts on new post added
   // runs on any request: get, put, post, delete
   onPostsUpdate() {
-    const unsub = onSnapshot(postsCollectionRef, (snapShot) => {
+    const unsub = onSnapshot(postsCollectionRef, async (snapShot) => {
 
       // check if collection size has changed!!
       //snapShot.size > 0
       if (get().posts !== null) {
-        //console.log('new post added!!');
-  
-
-
-        //const docs = snapShot.docs;
-  
-        // data[] array of docs
-        /* const newPosts = docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        })); */
         
-
-        //console.log(snapShot)
         const data = snapShot?.docChanges();
         let createdDoc = null;
         if (data) {
@@ -67,7 +54,18 @@ const usePostsStore = create((set, get) => ({
         //console.log('before update with new doc!!-----')
         //console.log(data, '----', createdDoc)
         if (createdDoc[0]) {
-          //console.log('update with new doc!!')
+          
+          // get user profile for each post
+          async function fetchUsersProfileForEachPost(posts) {
+            for (let i=0; i < posts.length; i++) {
+              const post = posts[i];
+              const profile = await fetchProfileByUserId(post.user);
+              posts[i].profile = profile;
+            }
+            return posts;
+          }
+
+          const editedPosts = await fetchUsersProfileForEachPost(createdDoc);
 
           // check to see new item already exist in state or not
           const doesExist = get().posts.some(p => p.id === createdDoc[0].id);
@@ -143,9 +141,21 @@ const usePostsStore = create((set, get) => ({
         ...doc.data(),
       }));
 
+      // get user profile for each post
+      async function fetchUsersProfileForEachPost(posts) {
+        for (let i=0; i < posts.length; i++) {
+          const post = posts[i];
+          const profile = await fetchProfileByUserId(post.user);
+          posts[i].profile = profile;
+        }
+        return posts;
+      }
+
+      const editedPosts = await fetchUsersProfileForEachPost(morePosts);
+
       set(state => ({
         ...state, 
-        posts: [...state.posts, ...morePosts],
+        posts: [...state.posts, ...editedPosts],
         // set the last doc fetched
         // if: docs empty =: lastDoc = undefined
         lastDoc: docs[docs.length - 1],

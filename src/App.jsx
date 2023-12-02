@@ -70,7 +70,7 @@ function App() {
           <Route
           path={'/'}
           element={(() => {
-            if (authUser === null) return <>loading..</>
+            if (authUser === null) return <></>
             else if (authUser) return <PageHome/>
             else return <Navigate to='/register'></Navigate>
           })()}
