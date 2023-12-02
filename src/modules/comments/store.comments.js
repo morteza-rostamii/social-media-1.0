@@ -28,6 +28,11 @@ const useCommentsStore = create((set, get) => ({
     set(state => ({...state, newPost: new Post({})}));
   },
 
+  // empty state:
+  emptyCommentsStore () {
+    set({});
+  },
+
   //========================================
   
   // update comments on new post added

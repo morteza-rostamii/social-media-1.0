@@ -22,6 +22,11 @@ const useAuthStore = create((set, get) => ({
   authUser: null,
   authProfile: null,
 
+  // empty state:
+  emptyAuthStore () {
+    set({});
+  },
+
   setAuth: (newUser) => set((state) => ({...state, authUser: newUser})),
   setAuthProfile: (profile) => set(state => ({...state, authProfile: profile})),
 

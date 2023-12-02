@@ -7,13 +7,21 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import {Button} from '@chakra-ui/react'
 import { Spinner } from '@chakra-ui/react'
 import CardPostSkeleton from './CardPostSkeleton'
+import {useLocation} from 'react-router-dom'
 
 const FeedPosts = () => {
   const {posts, lastDoc, fetchInitPosts, fetchMorePosts} = usePostsStore();
   // is posts loading
   const [postsLoading, setPostsLoading] = useState(false);
 
+  //const location = useLocation();
+
   useRunOnce(() => {
+    // if already fetched some data in global store, don't fetch again 
+    // infinit scroll will fetch more data
+    setPostsLoading(true);
+    if (posts.length) return;
+
     setPostsLoading(false);
     (async () => {
       await fetchInitPosts();

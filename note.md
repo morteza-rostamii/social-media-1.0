@@ -474,4 +474,73 @@ max-h-60 overflow-hidden
 </div>
 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<Routes>
+        <Route
+        element={<LayMain/>}
+        >
+          {/* /home */}
+          <Route
+          path={'/'}
+          element={(() => {
+            if (authUser === null) return <></>
+            else if (authUser) return <PageHome/>
+            else return <Navigate to='/register'></Navigate>
+          })()}
+          >
+          </Route>          
+
+          {/* /register */}
+          <Route
+          path={'/register'}
+          element={(() => {
+            if (authUser === null) return <></>;
+            else if (authUser) return <>auth not allowed!</>
+            else return <PageRegister/>
+          })()}
+          >
+          </Route>
+
+          {/* /login */}
+          <Route
+          path={'/login'}
+          element={(() => {
+            if (authUser === null) return <></>;
+            else if (authUser) return <>auth not allowed!</>
+            else return <PageLogin/>
+          })()}
+          >
+          </Route>
+
+          {/* /posts/:id */}
+          <Route
+          path='/posts/:id'
+          element={<PageSinglePost/>}
+          >
+          </Route>
+
+          {/* /search/:term */}
+          <Route
+          path='/search'
+          element={<PageSearch/>}
+          >
+          </Route>
+          
+        </Route>
+      </Routes>
  -->

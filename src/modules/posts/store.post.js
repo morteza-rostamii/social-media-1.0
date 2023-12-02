@@ -17,6 +17,11 @@ const usePostsStore = create((set, get) => ({
   singlePost: null, //Post
   lastDoc: null, // last post fetched
 
+  // empty state:
+  emptyPostsStore () {
+    set({});
+  },
+
   // create post data
   /* newPost: new Post({}),
 

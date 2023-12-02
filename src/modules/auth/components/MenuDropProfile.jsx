@@ -17,8 +17,15 @@ import { HiArrowRightOnRectangle } from "react-icons/hi2";
 import {signOut} from 'firebase/auth'
 import {auth} from '@/firebase/firedb'
 
+import useProfilesStore from '@/modules/profiles/store.profile'
+import usePostsStore from '@/modules/posts/store.post'
+import useCommentsStore from '@/modules/comments/store.comments'
+
 const MenuDropProfile = () => {
-  const {authUser, authProfile} = useAuthStore();
+  const {authUser, authProfile, emptyAuthStore} = useAuthStore();
+  const {emptyProfilesStore} = useProfilesStore();
+  const {emptyPostsStore} = usePostsStore();
+  const {emptyCommentsStore} = useCommentsStore();
   const navigate = useNavigate();
 
   function handLogout() {
@@ -26,14 +33,19 @@ const MenuDropProfile = () => {
     //window.alert('');
     signOut(auth)
       .then(() => {
-        navigate('/');
+
+        emptyCommentsStore();
+        emptyPostsStore();
+        emptyAuthStore();
+        emptyProfilesStore();
+
+        navigate('/login');
         console.log('user has logged out!!');
       })
       .catch((error) => {
         console.log('error during logout: ', error.message)
       })
   }
-
 
   return (
     <>

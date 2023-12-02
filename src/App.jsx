@@ -15,6 +15,8 @@ import PageSinglePost from './views/pages/PageSinglePost'
 import PageSearch from './views/pages/PageSearch'
 import { fetchProfileByUserId } from './modules/profiles/data.profiles'
 import toast, { Toaster } from 'react-hot-toast';
+import AuthRoute from './modules/auth/routes/AuthRoute'
+import GuestRoute from './modules/auth/routes/GuestRoute'
 
 function App() {
   const {authUser, setAuth, setAuthProfile} = useAuthStore();
@@ -66,52 +68,43 @@ function App() {
         <Route
         element={<LayMain/>}
         >
-          {/* /home */}
-          <Route
-          path={'/'}
-          element={(() => {
-            if (authUser === null) return <></>
-            else if (authUser) return <PageHome/>
-            else return <Navigate to='/register'></Navigate>
-          })()}
-          >
-          </Route>          
-
-          {/* /register */}
-          <Route
-          path={'/register'}
-          element={(() => {
-            if (authUser === null) return <></>;
-            else if (authUser) return <>auth not allowed!</>
-            else return <PageRegister/>
-          })()}
-          >
+          <Route element={<AuthRoute/>}>
+            {/* /home */}
+            <Route
+            path={'/'}
+            element={<PageHome/>}
+            >
+            </Route>
+            {/* /posts/:id */}
+            <Route
+            path='/posts/:id'
+            element={<PageSinglePost/>}
+            >
+            </Route>          
           </Route>
+          
+          <Route element={<GuestRoute/>}>
+            {/* /register */}
+            <Route
+            path={'/register'}
+            element={<PageRegister/>}
+            >
+            </Route>
 
-          {/* /login */}
-          <Route
-          path={'/login'}
-          element={(() => {
-            if (authUser === null) return <></>;
-            else if (authUser) return <>auth not allowed!</>
-            else return <PageLogin/>
-          })()}
-          >
-          </Route>
-
-          {/* /posts/:id */}
-          <Route
-          path='/posts/:id'
-          element={<PageSinglePost/>}
-          >
+            {/* /login */}
+            <Route
+            path={'/login'}
+            element={<PageLogin/>}
+            >
+            </Route>
           </Route>
 
           {/* /search/:term */}
-          <Route
+          {/* <Route
           path='/search'
           element={<PageSearch/>}
           >
-          </Route>
+          </Route> */}
           
         </Route>
       </Routes>

@@ -9,6 +9,11 @@ const profilesCollectionRef = collection(firestore, 'profiles');
 const useProfilesStore = create((set, get) => ({
   users: [],
   
+  // empty state:
+  emptyProfilesStore () {
+    set({});
+  },
+
   // Get: /users/:username
   async searchUsers() {
     
