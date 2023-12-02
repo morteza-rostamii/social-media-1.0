@@ -7,7 +7,7 @@ const MainLay = () => {
     <div
     className='
     flex flex-col
-    h-full
+    h-full flex-1
     '
     >
       <Header/>

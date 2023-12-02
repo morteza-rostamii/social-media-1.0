@@ -1,77 +1,127 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import {Input, Button} from '@chakra-ui/react'
+import {Input, Button, Avatar, Textarea} from '@chakra-ui/react'
 import useCommentsStore from '../store.comments';
 
 import {Comment} from '@/schemas/schema'
+import useAuthStore from '@/modules/auth/store.auth'
+import { MdEmojiEmotions } from "react-icons/md";
 
 const InputReply = ({
   postId, 
   parentId,
+  closeCommentInput,
 }) => {
-  const [showForm, setShowForm] = useState(false);
+  const textareaRef = useRef(null);
+  //const [showForm, setShowForm] = useState(false);
   const [replyInput, setReplyInput] = useState(new Comment({}));
-
   const {createCommentAct} = useCommentsStore();
+  const {authProfile} = useAuthStore();
+  const [replyLoading, setReplyLoading] = useState(false);
 
   async function handReplySubmit(event) {
     event.preventDefault();
 
     if (replyInput.body) {
 
+      setReplyLoading(true);
       // create reply
       await createCommentAct(
         replyInput,
         postId, 
         parentId,
-      );
-
-      setReplyInput(new Comment({}));
-      setShowForm(false);
+      )
+      .then(() => {
+        console.log('clean-------------')
+        setReplyLoading(false);
+        closeCommentInput();
+        setReplyInput(new Comment({}));
+        textareaRef.current.value = null;
+      })
+      
+      //setShowForm(false);
     }
   }
 
+  const handInputChange = (e) => setReplyInput(c => ({
+    ...c,
+    body: e.target.value,
+  }));
+
+  const handCancelComment = () => closeCommentInput();
+
+  useEffect(() => {
+    console.log(replyInput.body)
+  }, [replyInput]);
+
   return (
-    <div
+    <form
     className='
-    flex gap-3 #w-full
+    flex gap-3 items-center h-full w-full
     '
+    onSubmit={(e) => handReplySubmit(e)}
     >
-      <Button
-      variant='outline'
-      colorScheme='cyan'
-      onClick={() => setShowForm(c => !c)}
+      <div
+      className='
+      flex h-full self-baseline
+      '
       >
-        reply
-      </Button>
-      {
-        showForm 
-        ? (
-          <form
+        <Avatar 
+        size='sm'
+        src={authProfile?.avatar}
+        />
+      </div>
+      <div
+      className='
+      flex-1
+      '
+      >
+        <Textarea 
+        placeholder='comment' 
+        ref={textareaRef}
+        variant='flushed'
+        rows={2}
+        height='auto'
+        size='lg'
+        onChange={(e) => handInputChange(e)}
+
+        //onFocus={handInputFocus}
+        />
+        
+        {/* actions */}
+        <div
+        className='
+        flex items-center justify-between py-2
+        '
+        >
+          <div>
+            <MdEmojiEmotions size='24'/>
+          </div>
+          <div
           className='
-          flex gap-3
-          #w-full
+          flex
           '
-          onSubmit={(e) => handReplySubmit(e)}
           >
-            <Input
-            className='
-            flex-1
-            '
-            value={replyInput.body}
-            onChange={(e) => setReplyInput(c => ({...c, body: e.target.value}))}
-            />
             <Button
-            type='submit'
-            variant='outline'
-            colorScheme='cyan'
+            variant='ghost'
+            colorScheme='blue'
+            onClick={handCancelComment}
             >
-              send
+              Cancel
             </Button>
-          </form>
-        ): ''
-      }
-    </div>
+            <Button
+            variant='ghost'
+            colorScheme='blue'
+            type='submit'
+            isDisabled={!replyInput.body}
+            isLoading={replyLoading}
+            >
+              Comment
+            </Button>
+          </div>
+        </div>
+      </div>
+    </form>
   )
 }
 

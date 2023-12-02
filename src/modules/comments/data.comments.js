@@ -25,7 +25,7 @@ export async function fetchCommentById(commentId) {
 
 export async function fetchCommentsByPostId({
   postId='',
-  lim=5,
+  //lim=5,
 }) {
   let postComments = [];
   
@@ -33,7 +33,7 @@ export async function fetchCommentsByPostId({
     commentsCollectionRef, 
     where('postId', '==', postId),
     orderBy('createdAt', 'desc'),
-    limit(lim),
+    //limit(lim),
     );
 
   const commentsSnapshot = await getDocs(commentsQuery);
@@ -45,11 +45,11 @@ export async function fetchCommentsByPostId({
     ...doc.data(),
   }));
 
-  console.log(postComments)
+  //console.log(postComments)
 
   return {
     postComments,
-    lastDoc: docs[docs.length - 1],
+    //lastDoc: docs[docs.length - 1],
   };
 }
 

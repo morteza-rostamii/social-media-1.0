@@ -9,13 +9,13 @@ const Comments = ({
     <div
     className='
     flex flex-col gap-8
-    mb-96
+    mb-4 border-t-2 pt-3 h-full
     '
     >
-      {/* comments section */}
-      <ListComments postId={postId}/>
       {/* comment input */}
       <InputComment postId={postId}/>
+      {/* comments section */}
+      <ListComments postId={postId}/>
     </div>
   )
 }

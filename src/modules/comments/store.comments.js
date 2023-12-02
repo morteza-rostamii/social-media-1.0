@@ -81,25 +81,37 @@ const useCommentsStore = create((set, get) => ({
   // Get: /blogs
   async fetchInitCommentsAct({
     postId='',
-    page=1,
-    lim=20,
+    //page=1,
+    //lim=20,
   }) {
     
     try {
       //const querySnapshot = await getDocs(query(collection(db, 'users'), limit(5)));
       const {
         postComments,
-        lastDoc,
+        //lastDoc,
       } = await fetchCommentsByPostId({
         postId: postId,
-        lim: lim,
+        //lim: lim,
       });
+
+      // get user profile for each comment
+      async function fetchUsersProfileForEachComment(comments) {
+        for (let i=0; i < comments.length; i++) {
+          const comment = comments[i];
+          const profile = await fetchProfileByUserId(comment.user);
+          comments[i].profile = profile;
+        }
+        return comments;
+      }
+  
+      const editedComments = await fetchUsersProfileForEachComment(postComments);
 
       set(state => ({
         ...state, 
-        comments: [...postComments],
+        comments: [...editedComments],
         // set the last doc fetched
-        lastDoc: lastDoc,
+        //lastDoc: lastDoc,
       }));
     } catch(error) {
       console.log(error.message);
@@ -107,25 +119,47 @@ const useCommentsStore = create((set, get) => ({
   },
 
   // get more comments
-  async fetchMoreComments(page=1, lim=2) {
-    const querySnapshot = await getDocs(query(
+  async fetchMoreComments(
+    //page=1, 
+    //lim=2
+    ) {
+    const query = query(
       commentsCollectionRef, 
-      limit(lim),
-      startAfter(get().lastDoc)
-      ));          
+      //limit(lim),
+      //startAfter(get().lastDoc)
+      );
+
+    try {
+      const querySnapshot = await getDocs(query);          
       const docs = querySnapshot.docs;
-      const morecomments = docs.map((doc) => ({
+      const moreComments = docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+  
+      // get user profile for each comment
+      async function fetchUsersProfileForEachComment(comments) {
+        for (let i=0; i < comments.length; i++) {
+          const comment = comments[i];
+          const profile = await fetchProfileByUserId(comment.user);
+          comments[i].profile = profile;
+        }
+        return comments;
+      }
+  
+      const editedComments = await fetchUsersProfileForEachComment(moreComments);
 
       set(state => ({
         ...state, 
-        comments: [...state.comments, ...morecomments],
+        // comments: [...state.comments, ...morecomments],
+        comments: editedComments,
         // set the last doc fetched
         // if: docs empty =: lastDoc = undefined
-        lastDoc: docs[docs.length - 1],
+        //lastDoc: docs[docs.length - 1],
       }));
+    } catch(error) {
+      console.log(error.message);
+    }
   },
 
   async fetchSinglePost(postId) {
@@ -169,11 +203,9 @@ const useCommentsStore = create((set, get) => ({
   // Post: /blogs
   async createCommentAct(data, postId, parentId) {
     data.user = useAuthStore.getState().authUser.uid;
-
     data.parent = parentId ? parentId : null; 
-
     data.postId = postId;
-    
+
     try {
       const docRef = await addDoc(commentsCollectionRef, data);
   
@@ -183,9 +215,20 @@ const useCommentsStore = create((set, get) => ({
 
       // update ui_state with new comment
       const createdComment = await fetchCommentById(newCommentId);
-      console.log('created:: ', createdComment);
+
+      async function fetchUsersProfileForEachComment(comments) {
+        for (let i=0; i < comments.length; i++) {
+          const comment = comments[i];
+          const profile = await fetchProfileByUserId(comment.user);
+          comments[i].profile = profile;
+        }
+        return comments;
+      }
+  
+      const editedComments = await fetchUsersProfileForEachComment([createdComment]);
+
       set(state => ({...state, comments: [
-        createdComment,
+        editedComments[0],
         ...state.comments, 
       ]}));
 
