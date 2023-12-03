@@ -1,6 +1,6 @@
 import {create} from 'zustand'
 import {firestore} from '@/firebase/firedb'
-import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot} from 'firebase/firestore'
+import {getDocs, collection, deleteDoc, doc, addDoc, updateDoc, query, where, onSnapshot, getDoc} from 'firebase/firestore'
 //import { getDocFromResponse } from '@/utils/utils.fixdata';
 
 // reference to blogs_collection
@@ -34,19 +34,27 @@ const useProfilesStore = create((set, get) => ({
   // Post: /blogs
   async createProfile(data) {
     
-    addDoc(profilesCollectionRef, data)
-      .then(async (ref) => {
-        
-        console.log('success createing profile!! ', ref.id);
+    let newProfile = null;
 
-        // update state
-        //const newDoc = await getDocFromResponse(firestore, 'blogs', ref.id);
-        //console.log(newDoc);
-        //set(state => ({...state, blogs: [...state.blogs, newDoc]}));
-      })
-      .catch((error) => {
-        console.log(error.message);
-      })
+    try {
+      const newProfileRef = await addDoc(profilesCollectionRef, data)
+        
+      console.log('success createing profile!! ', newProfileRef.id);
+  
+      // update state
+      //const newDoc = await getDocFromResponse(firestore, 'blogs', ref.id);
+      const profileDocRef = doc(firestore, 'profiles', newProfileRef.id);
+      const profileSnapShot = await getDoc(profileDocRef);
+      if (profileSnapShot.exists()) {
+        const profileDoc = {id: profileSnapShot.id, ...profileSnapShot.data()};
+        newProfile = profileDoc;
+      }
+
+    } catch(error) {
+      console.log(error.message);
+    }
+
+    return newProfile;
   },
 
   // Put: /blogs/:id

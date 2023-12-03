@@ -33,10 +33,10 @@ function App() {
           
           // store authUser profile in localStorage
           if (user.uid) {
-            console.log(user.uid)
+            console.log('LOGGED IN BABY!!!', user.uid)
             const profile = await fetchProfileByUserId(user.uid);
             if (profile) {
-              console.log('get profile')
+              console.log('get profile------------**', profile);
               localStorage.setItem('auth-profile', JSON.stringify(profile));
               setAuthProfile(profile);
             }
@@ -65,10 +65,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-        element={<LayMain/>}
-        >
-          <Route element={<AuthRoute/>}>
+        
+        <Route element={<AuthRoute/>}>
+          <Route
+          element={<LayMain/>}
+          >
             {/* /home */}
             <Route
             path={'/'}
@@ -78,12 +79,14 @@ function App() {
             {/* /posts/:id */}
             <Route
             path='/posts/:id'
-            element={<PageSinglePost/>}
-            >
-            </Route>          
+            element={<PageSinglePost/>}></Route>          
           </Route>
+        </Route>
           
-          <Route element={<GuestRoute/>}>
+        <Route element={<GuestRoute/>}>
+          <Route
+          element={<LayMain/>}
+          >
             {/* /register */}
             <Route
             path={'/register'}
@@ -94,10 +97,9 @@ function App() {
             {/* /login */}
             <Route
             path={'/login'}
-            element={<PageLogin/>}
-            >
-            </Route>
+            element={<PageLogin/>}></Route>
           </Route>
+        </Route>
 
           {/* /search/:term */}
           {/* <Route
@@ -106,7 +108,6 @@ function App() {
           >
           </Route> */}
           
-        </Route>
       </Routes>
 
       {/* register toaster */}

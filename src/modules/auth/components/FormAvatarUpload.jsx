@@ -28,7 +28,7 @@ const FormAvatarUpload = ({
     className={`
     ${show ? 'flex' : 'hidden'}
     flex-col gap-4 p-8 px-16 rounded-md
-    #bg-slate-50 text-center shadow-lg
+    bg-white text-center shadow-lg
     `}
     onSubmit={handRegisterSubmit}
     >

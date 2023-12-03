@@ -9,7 +9,9 @@ import FormAvatarUpload from '@/modules/auth/components/FormAvatarUpload';
 import useFormValidation from '@/modules/auth/hooks/useFormValidation';
 import toast, { Toaster } from 'react-hot-toast';
 
-const toastRegister = () => toast('we sent you en email');
+const toastRegister = () => toast.success('we sent you en email');
+const toastNoAvatar = () => toast.error('please upload an avatar');
+const toastFillForm = () => toast.error('please fill out the form');
 
 const PageRegister = () => {
   const [user, setUser] = useState({
@@ -44,14 +46,16 @@ const PageRegister = () => {
   const navigate = useNavigate();
 
   // register with email and password
-  function registerUser() {
+  async function registerUser() {
 
     // sets error state
     const isThereErrors = validateForm();
 
-    window.alert(errors.avatar);
+    if (errors.avatar) {
+      toastNoAvatar();
+    }
     if (errors.username || errors.email || errors.password) {
-      alert('complete the form!');
+      toastFillForm();
     }
     
     // if: no errors =: returns true.
@@ -73,7 +77,7 @@ const PageRegister = () => {
     // set loading
     setRegisterLoading(true);
 
-    registerAct({
+    await registerAct({
       data: user,
       file: user.avatar,
       callBack: callBackAfterRegister,
@@ -123,14 +127,15 @@ const PageRegister = () => {
   }, [step]) */
 
   return (
-    <div
+    <main
     className='
     flex items-center justify-center
-    flex-1
+    flex-1 bg-slate-50 container mx-auto
     '
     >
       <div
       id='page-register-wrap'
+      className=''
       >
         {/* {forms[step]} */}
         
@@ -153,7 +158,7 @@ const PageRegister = () => {
         registerLoading={registerLoading}
         />
       </div>
-    </div>
+    </main>
   )
 }
 

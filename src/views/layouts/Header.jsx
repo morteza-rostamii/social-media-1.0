@@ -13,6 +13,9 @@ import MenuDropProfile from '@/modules/auth/components/MenuDropProfile'
 //import { HiOutlineSearch } from "react-icons/hi";
 import {auth} from '@/firebase/firedb'
 import {useNavigate} from 'react-router-dom'
+import { PiAppleLogo } from "react-icons/pi";
+
+import Logo from '@/assets/Logo.svg'
 
 const Header = () => {
   const {authUser, authProfile} = useAuthStore();
@@ -35,16 +38,20 @@ const Header = () => {
         flex items-center gap-3
         '
         >
-          <Button
-          variant='outline'
-          colorScheme='cyan'
-          isRound={true}
-          as={Link}
+          <Link
+          //variant='outline'
+          //colorScheme='blue'
+          //isRound={true}
+          //as={Link}
           to={'/'}
           >
             {/* <BiLogoReddit size={40}/> */}
-            Rostami Social
-          </Button>
+            <img 
+            className='
+            w-32
+            '
+            src={Logo} alt="--=" />
+          </Link>
           {/* <span>rostami-social</span> */}
         </div>
 

@@ -56,15 +56,16 @@ const PageLogin = () => {
   return (
     <main
     className='
-    flex items-center justify-center
+    flex items-center justify-center bg-slate-50 flex-1
+    container mx-auto 
     '
     >
       <form 
       className={`
       flex
       flex-col gap-4 p-8 px-16 rounded-md
-      #bg-slate-50 text-center shadow-lg
-      `}
+      text-center shadow-lg bg-white
+       `}
       onSubmit={handLoginSubmit} 
 
       >

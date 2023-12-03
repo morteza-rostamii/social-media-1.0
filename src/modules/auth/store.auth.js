@@ -31,42 +31,42 @@ const useAuthStore = create((set, get) => ({
   setAuthProfile: (profile) => set(state => ({...state, authProfile: profile})),
 
   // /register
-  registerAct({
+  async registerAct({
     data, 
     file,
     callBack,
   }) {
+
+    // upload image:
+    const downloadUrl = await uploadOneImage({file: file, path: 'avatars'});
+
     createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // returns the signed up user
         const currentUser = userCredential.user;
-        console.log(currentUser.uid);
+        console.log('love to create a new user!!', currentUser.uid);
 
         // send email verification
         //currentUser.sendEmailVerification();
         //auth.signOut();
 
-        return {data, currentUser, file};
-      })
-      .then(({
-        data, currentUser, file
-      }) => {
-        // upload image
-        uploadOneImage({file: file, path: 'avatars'})
-          .then((downloadUrl) => {
-            console.log(downloadUrl);
-            // create profile
-            const profile = new Profile({
-              user: currentUser.uid,
-              avatar: downloadUrl,
-              username: data.username,
-            });
-            // create profile
-            useProfilesStore.getState().createProfile({...profile});
+        // create profile
+        const profile = new Profile({
+          user: currentUser.uid,
+          avatar: downloadUrl,
+          username: data.username,
+        });
+        // create profile
+        const createdProfile = await useProfilesStore.getState().createProfile({...profile});
 
-            // after register
-            callBack();
-          })
+        console.log('set new profile::*****', createdProfile)
+        set(state => ({
+          ...state,
+          authProfile: createdProfile,
+        }))
+
+        // after register
+        callBack();
 
       })
       .catch((error) => {
